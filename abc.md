@@ -97,7 +97,7 @@ https://www.sutton-signwriting.io/signmaker
 ## Alfabeto
 
 |a|b|c|ĉ|d|e|
-|S1f720|S15a20|S16d20|S17720|S10120|S14a20|
+|S1f720|S14720|S16d20|S17720|S10120|S14a20|
 
 |f|g|ĝ|h|ĥ|i|
 |S1ce20|S10020|S1f520|S1a020|S19c20|S19220|
