@@ -1,0 +1,123 @@
+---
+layout: default
+---
+
+<link rel="preload" href="https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/SuttonSignWritingLine.ttf" as="font" type="font/ttf" crossorigin />
+<link rel="preload" href="https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/SuttonSignWritingFill.ttf" as="font" type="font/ttf" crossorigin />
+<link rel="preload" href="https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/SuttonSignWritingOneD.ttf" as="font" type="font/ttf" crossorigin />
+
+<script src="https://unpkg.com/@sutton-signwriting/font-ttf@1.5.2/fsw/fsw.js"></script>
+<script src="https://unpkg.com/@sutton-signwriting/font-ttf@1.5.2/font/font.js"></script>
+
+<script>
+
+function sign_wait(el) {
+  // move elements content (sign FSW) to an attribute
+  // and replace by a waiting symbol
+  const waiting = "🖐\uFE0E";
+  const sign = el.textContent;
+  if (sign.match(/^(?:M\d{3}x\d{3}|S[\da-f]{5})/)) {
+    el.setAttribute("data-sgn",el.textContent);
+    el.textContent = waiting;
+  }
+}
+
+function sign_render(el) {
+  const sign = el.getAttribute("data-sgn");
+  if (sign) {
+    if (sign.match(/^M\d{3}/)) {
+        el.setAttribute("data-sgn",sign);
+        el.innerHTML = ssw.ttf.fsw.signSvg(sign);
+    } else if (sign.match(/^S[\da-f]{5}/)) {
+        el.setAttribute("data-sgn",sign);
+        el.innerHTML = ssw.ttf.fsw.symbolSvg(sign);
+    }    
+  }
+}
+
+function scale_svg(svg,procent) {
+  // get height and width from svg viewBox
+  const viewBox = svg.getAttribute("viewBox");
+  const n4 = viewBox.split(" ");
+  const width = parseFloat(n4[2]);
+  const height = parseFloat(n4[3]);
+  // set width to a scaled value
+  //svg.setAttribute("preserveAspectRatio","XMidYMin slice");
+  svg.setAttribute("height",height*procent/100)
+  svg.setAttribute("width",width*procent/100)
+}
+
+window.onload = () => {  
+
+  // set waiting symbols
+  document.querySelectorAll("dd,td,li,.sign").forEach((el) => sign_wait(el));
+
+  // trigger sign rendering
+  ssw.ttf.font.cssAppend(''); 
+  ssw.ttf.font.cssLoadedLine(() => {                   
+    document.querySelectorAll("dd,td,li,.sign").forEach((el) => sign_render(el));
+  }); 
+           
+  // setup scaler
+  const scaler = document.getElementById("scale");
+  scaler.addEventListener("input", (event) => {
+    const procent = event.target.value||100;
+    const label = document.getElementById("scale_pct");
+    label.textContent = `${procent}%`;
+
+    // scale SVGs
+    document.querySelectorAll(".signs svg").forEach((svg) => {
+      scale_svg(svg,procent);
+    });
+    // scale ul font
+    document.querySelectorAll(".signs>ul").forEach((ul) => {
+      ul.style.fontSize = `${24*procent/100}px`;
+    });
+  });
+}
+
+</script>
+
+{% if page.js %}
+  {% for js_file in page.js %}
+  <script src='{{ site.baseurl }}/assets/js/{{ js_file }}.js' type="text/javascript"></script>
+  {% endfor %}
+{% endif %}
+
+{% if page.css %}
+  {% for stylesheet in page.css %}
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/{{ stylesheet }}.css" type="text/css">
+  {% endfor %}
+{% endif %}
+
+<article class="post">
+
+    <header class="post-header">
+      <h2 class="post-title">{{ page.title2 | escape }}</h1>
+    </header>
+
+    <!--
+    <div class="scale">
+      <label for="scale" class="sign">M541x521S14c10518x479S14c18460x481S27102502x481S2711a485x480</label>
+      <input type="range" id="scale" name="scale" min="50" max="150" value=100 step="10" style="width: 20em"/>
+      <label id="scale_pct">100%</label>
+    </div>    
+    -->
+
+    <div class="post-content">
+      {{ content }}
+    </div>
+
+{% if page.next_ch %}
+{% assign next-file = "/" | append: page.next_ch | append: ".md"  %}
+{% assign next-page = site[page.collection] | where_exp: "item", "item.path contains next-file" | first %}
+<!--
+<span>{{next-file}}</span>
+-->
+{% if next-page %}
+<a class="sekva_folio" href="{{next-page.url}}">{{next-page.title}}</a>
+{% endif %}
+{% endif %}
+
+  
+</article>

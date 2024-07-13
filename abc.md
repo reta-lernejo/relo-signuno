@@ -1,103 +1,60 @@
 ---
-layout: page
-title: Signuno - enkonduko
-js-ext:
+layout: signuno
+title: Signuno - alfabeto
+js:
+    - vortaro
+css:
     - sign
 ---
 
 <!--
-
 https://www.sutton-signwriting.io/signmaker
 -->
 
-<!--<script src="https://unpkg.com/@sutton-signwriting/core@1.6.0"></script>
-<script src="https://unpkg.com/@sutton-signwriting/core@1.6.0/fsw/fsw.js"></script>-->
-<script src="https://unpkg.com/@sutton-signwriting/font-ttf@1.5.2/fsw/fsw.js"></script>
-<script src="https://unpkg.com/@sutton-signwriting/font-ttf@1.5.2/font/font.js"></script>
-
-<style>
-    @font-face {
-    font-family: "SuttonSignWritingLine";
-    src: 
-        local('SuttonSignWritingLine'),
-        url('https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/SuttonSignWritingLine.ttf') format('truetype');
-    }
-    @font-face {
-    font-family: "SuttonSignWritingFill";
-    src: 
-        local('SuttonSignWritingFill'),
-        url('https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/SuttonSignWritingFill.ttf') format('truetype');
-    }
-    @font-face {
-    font-family: "SuttonSignWritingOneD";
-    src: 
-        local('SuttonSignWritingOneD'),
-        url('https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/SuttonSignWritingOneD.ttf') format('truetype');
-    }
-
-    dl {
-        columns: 2;
-        border-left: 2px dotted black;
-        column-rule: 2px dotted black;        
-    }
-
-    dt {
-        font-size: xx-large;
-        border-top: 1px dotted silver;
-        padding-left: 1em;
-    }
-
-    dd {
-        break-before: avoid;
-        text-align: center;
-    }
-
-    dd span {
-        display: none;
-    }
-
-    td {
-        font-size: xx-large;
-    }
-
-</style>
-
-<script>
-
-    // vd https://github.com/sutton-signwriting/font-ttf/blob/master/src/fsw/fsw-symbol-svg.js
-
-    function desegnu_gestojn() {
-        document.querySelectorAll("table,dl").forEach((container) => {
-            container.querySelectorAll("td,dd").forEach((td) => {
-                const gesto = td.textContent;
-                if (gesto.match(/^M\d{3}/)) {
-                    td.setAttribute("data-sgn",gesto);
-                    td.innerHTML = ssw.ttf.fsw.signSvg(gesto);
-                } else if (gesto.match(/^S[\da-f]{5}/)) {
-                    td.setAttribute("data-sgn",gesto);
-                    td.innerHTML = ssw.ttf.fsw.symbolSvg(gesto);
-                }
-            });
-        });
-    }
-
-    window.onload = () => {
-
-        ssw.ttf.font.cssAppend(''); 
-        //ssw.ttf.fsw.font.cssAppend('');
-        //ssw.ttf.fsw.
-        ssw.ttf.font.cssLoadedLine(
-                function() {
-                    desegnu_gestojn();
-                }
-        );
-    }
-</script>
-
 ## Alfabeto
 
+<div id="alfabeto">
+
+|a|b|c|ĉ|d|
+|e|f|g|ĝ|h|
+|ĥ|i|j|ĵ|k|
+|l|m|n|o|p|
+|r|s|ŝ|t|u|
+|ŭ|v|z|
+|q|w|x|y|
+
+|A|B|C(ĉ)|D|E|
+|F|G(ĝ)|H(ĥ)|I|J(ĵ)|
+|K|L|M|N|O|
+|P|R|S(ŝ)|T|U(ŭ)|
+|V|Z|
+|Q|W|X|Y|
+
+</div>
+
+<script>
+    const abc = document.querySelectorAll("#alfabeto table tr")
+        .forEach((tr) => {
+            // kopiu la tabellinion
+            const _tr = tr.cloneNode(true);
+            // traduku al Signuno
+           for (const td of _tr.children) {
+              // trovu tekstojn de la ĉeloj en la vortaro
+              // forigu (...) antaŭe
+              const text = td.textContent.replace(/\(.*\)/,'');
+              const sgn = vortaro[text];
+              if (sgn) {
+                td.setAttribute("data-sgn",sgn);
+              }
+           }
+           tr.insertAdjacentElement("afterend",_tr)
+        });
+
+</script>
+
+<!--
 |a|b|c|ĉ|d|e|
-|S1f720|S14720|S16d20|S17720|S10120|S14a20|
+|S1f820|S14720|S16d20|S17720|S10120|S14a20|
 
 |f|g|ĝ|h|ĥ|i|
 |S1ce20|S10020|S1f520|S1a020|S19c20|S19220|
@@ -128,3 +85,5 @@ https://www.sutton-signwriting.io/signmaker
 
 |Z|Q|W|X|Y|
 |M513x520S14c20489x489S22620487x480|M517x515S1c120488x486S22204484x492|M508x517S15520493x491S22200494x483|M508x519S10e20493x489S22600497x482|M508x517S15420493x492S22204495x483|
+
+-->

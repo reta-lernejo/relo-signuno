@@ -1,0 +1,187 @@
+
+@font-face {
+font-family: "SuttonSignWritingLine";
+src: 
+    local('SuttonSignWritingLine'),
+    url('https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/SuttonSignWritingLine.ttf') format('truetype');
+}
+@font-face {
+font-family: "SuttonSignWritingFill";
+src: 
+    local('SuttonSignWritingFill'),
+    url('https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/SuttonSignWritingFill.ttf') format('truetype');
+}
+@font-face {
+font-family: "SuttonSignWritingOneD";
+src: 
+    local('SuttonSignWritingOneD'),
+    url('https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/SuttonSignWritingOneD.ttf') format('truetype');
+}
+
+/* 
+aŭ tabele:
+https://gist.github.com/LeaVerou/12b1d1e078510900c7ab206da1a0ff2e 
+*/
+
+.signs {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    row-gap: 2em;
+    align-items: stretch;
+}
+
+.signs > ul, .signs > ol {
+    flex: 0.1 0.1 17%;
+    list-style: none;
+    margin: 0;
+    font-size: x-large;
+    border-right: 1px solid cornflowerblue;
+}
+
+.signs > ul:first-child,
+.signs > ol:first-child {
+    border-left: 3px solid cornflowerblue;
+}
+
+.signs > ul:last-child,
+.signs > ol:last-child {
+    border-right: 3px solid cornflowerblue;
+}
+
+
+ul li, ol li {
+    padding-left: 0.2em;
+    padding-right: 0.1em;
+}
+
+
+ul li blockquote, ol li blockquote {
+    border-left: none;
+}
+ul ul, ol ul {
+    list-style: none;
+    text-align: center;
+    margin: 0;
+}
+
+.parts {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+  
+.part {
+    padding: 1em;
+    border-left: 1px solid cornflowerblue;
+}
+
+.part:first-child {
+    border-left: none;
+}
+
+.part-list {
+    display: flex;
+    flex-direction: row;
+}
+
+.part-list ul {
+    list-style: none;
+    margin: 0;
+    font-size: x-large;
+}
+
+.sec {
+    font-size: x-large;
+    margin: 0.3em;
+    break-after: avoid;
+
+    border-radius: 0.5em;
+    background-color: #e2e2db;
+    padding: 0.5em;
+}
+
+dt {
+    font-size: x-large;
+    border-top: 1px dotted silver;
+    padding-left: 1em;
+}
+
+dd {
+    break-before: avoid-column;
+    text-align: center;
+}
+
+dd span {
+    display: none;
+}
+
+/*
+td:first-of-type {
+    font-size: x-large;
+    text-align: right;
+}
+*/
+
+td:nth-of-type(2) {
+    text-align: center;
+}
+
+td:nth-of-type(2) span {
+    display: none;
+}
+
+@media print {
+    /*header*/
+    
+    header, footer, .scale {
+        display: none
+    }
+
+    .post-header {
+        display: block;
+    }
+
+    .post-header h2 {
+        font-size: large
+    }
+
+    blockquote {
+        /* we hide the DGS hints on the printout to
+        minimize the space needed for the text*/
+        display: none
+    }
+
+    dt {
+        font-size: medium;
+    }
+
+    /*
+    Per transform scale ne funkcias,
+
+    Pli bone rekalkulu ĉiujn width-atributojn de ĉiuj SVG
+    kaj adaptu tekst-grandecojn aparte
+ 
+    .post-content {
+        transform-origin: top left;
+        transform: scale(0.5,0.5);  
+    }      
+    */   
+
+    .signs > ul,
+    .signs > ol {
+        border-left: 1pt solid cornflowerblue;
+    }   
+    
+    .signs > ul:first-child,
+    .signs > ol:first-child {
+        border-left: none;
+    }    
+    
+
+    svg {
+        
+        /*transform: scale(0.5,0.5);*/
+        align-self: center
+    }
+}
