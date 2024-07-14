@@ -1,4 +1,4 @@
-const vortaro = {
+const sgn_elm = {
     "a": "S1f820",
     "b": "S14720",
     "c": "S16d20",

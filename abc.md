@@ -2,7 +2,7 @@
 layout: signuno
 title: Signuno - alfabeto
 js:
-    - vortaro
+    - sgn_elm
 css:
     - sign
 ---
@@ -42,7 +42,7 @@ https://www.sutton-signwriting.io/signmaker
               // trovu tekstojn de la ĉeloj en la vortaro
               // forigu (...) antaŭe
               const text = td.textContent.replace(/\(.*\)/,'');
-              const sgn = vortaro[text];
+              const sgn = sgn_elm[text];
               if (sgn) {
                 td.setAttribute("data-sgn",sgn);
               }

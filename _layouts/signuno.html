@@ -31,9 +31,11 @@ function sign_render(el) {
     } else if (sign.match(/^S[\da-f]{5}/)) {
         el.setAttribute("data-sgn",sign);
         el.innerHTML = ssw.ttf.fsw.symbolSvg(sign);
-    }    
+    } 
   }
 }
+
+
 
 function scale_svg(svg,procent) {
   // get height and width from svg viewBox
@@ -47,20 +49,63 @@ function scale_svg(svg,procent) {
   svg.setAttribute("width",width*procent/100)
 }
 
-window.onload = () => {  
+let _lanĉtaskoj = []; 
+let _signuntaskoj = []; 
 
+
+/**
+ * Kolektas funkciojn, kiuj vokiĝos tuj post kiam la dokumento estas ŝargita.
+ */
+function lanĉe(tasko) {
+    _lanĉtaskoj.push(tasko);
+}
+
+
+/**
+ * Kolektas funkciojn, kiuj vokiĝos tuj post kiam la dokumento estas ŝargita.
+ */
+function signune(tasko,poz) {
+    if (poz !== undefined)
+    _signuntaskoj.splice(poz,0,tasko);
+    else
+    _signuntaskoj.push(tasko);
+}
+
+
+document.body.style.cursor = 'progress';
+
+/**
+ * Plenumas ciujn lanĉo-taskojn, kiujn vi aldonu per 
+ * lanĉe(() => { mia_tasko(p1,p2,...); })
+ */
+window.onload = () => {
+    try {
+        // plenumu ĉiujn lanĉ-taskojn
+        // ni faros intence fine, t.e. post kreo de elektiloj kaj butonoj
+        for (t of _lanĉtaskoj) { t(); }
+    }
+    finally {
+        document.body.style.cursor = 'default';
+    }
+  }
+
+signune(()=>{
+  document.querySelectorAll("dd,td,li,.sign").forEach((el) => sign_render(el));
+})
+
+lanĉe(() => {
   // set waiting symbols
   document.querySelectorAll("dd,td,li,.sign").forEach((el) => sign_wait(el));
 
   // trigger sign rendering
   ssw.ttf.font.cssAppend(''); 
-  ssw.ttf.font.cssLoadedLine(() => {                   
-    document.querySelectorAll("dd,td,li,.sign").forEach((el) => sign_render(el));
+  ssw.ttf.font.cssLoadedLine(() => {   
+    for (t of _signuntaskoj) { t(); }  
   }); 
            
   // setup scaler
   const scaler = document.getElementById("scale");
-  scaler.addEventListener("input", (event) => {
+  if (scaler) scaler.addEventListener("input", (event) => {
     const procent = event.target.value||100;
     const label = document.getElementById("scale_pct");
     label.textContent = `${procent}%`;
@@ -74,7 +119,7 @@ window.onload = () => {
       ul.style.fontSize = `${24*procent/100}px`;
     });
   });
-}
+});
 
 </script>
 
@@ -104,7 +149,7 @@ window.onload = () => {
     </div>    
     -->
 
-    <div class="post-content">
+    <div class="pohttps://www.sutton-signwriting.iost-content">
       {{ content }}
     </div>
 

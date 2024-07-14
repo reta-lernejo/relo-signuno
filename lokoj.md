@@ -1,7 +1,9 @@
 ---
-layout: page
-title: Signuno - enkonduko
-js-ext:
+layout: signuno
+title: Signuno - lokoj
+js:
+    - sgn_elm
+css:
     - sign
 ---
 
@@ -10,92 +12,51 @@ js-ext:
 https://www.sutton-signwriting.io/signmaker
 -->
 
-<!--<script src="https://unpkg.com/@sutton-signwriting/core@1.6.0"></script>
-<script src="https://unpkg.com/@sutton-signwriting/core@1.6.0/fsw/fsw.js"></script>-->
-<script src="https://unpkg.com/@sutton-signwriting/font-ttf@1.5.2/fsw/fsw.js"></script>
-<script src="https://unpkg.com/@sutton-signwriting/font-ttf@1.5.2/font/font.js"></script>
-
-<style>
-    @font-face {
-    font-family: "SuttonSignWritingLine";
-    src: 
-        local('SuttonSignWritingLine'),
-        url('https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/SuttonSignWritingLine.ttf') format('truetype');
-    }
-    @font-face {
-    font-family: "SuttonSignWritingFill";
-    src: 
-        local('SuttonSignWritingFill'),
-        url('https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/SuttonSignWritingFill.ttf') format('truetype');
-    }
-    @font-face {
-    font-family: "SuttonSignWritingOneD";
-    src: 
-        local('SuttonSignWritingOneD'),
-        url('https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/SuttonSignWritingOneD.ttf') format('truetype');
-    }
-
-    dl {
-        columns: 2;
-        border-left: 2px dotted black;
-        column-rule: 2px dotted black;        
-    }
-
-    dt {
-        font-size: xx-large;
-        border-top: 1px dotted silver;
-        padding-left: 1em;
-    }
-
-    dd {
-        break-before: avoid;
-        text-align: center;
-    }
-
-    dd span {
-        display: none;
-    }
-
-    td {
-        font-size: xx-large;
-    }
-
-</style>
-
-<script>
-
-    // vd https://github.com/sutton-signwriting/font-ttf/blob/master/src/fsw/fsw-symbol-svg.js
-
-    function desegnu_gestojn() {
-        document.querySelectorAll("table,dl").forEach((container) => {
-            container.querySelectorAll("td,dd").forEach((td) => {
-                const gesto = td.textContent;
-                if (gesto.match(/^M\d{3}/)) {
-                    td.setAttribute("data-sgn",gesto);
-                    td.innerHTML = ssw.ttf.fsw.signSvg(gesto);
-                } else if (gesto.match(/^S[\da-f]{5}/)) {
-                    td.setAttribute("data-sgn",gesto);
-                    td.innerHTML = ssw.ttf.fsw.symbolSvg(gesto);
-                }
-            });
-        });
-    }
-
-    window.onload = () => {
-
-        ssw.ttf.font.cssAppend(''); 
-        //ssw.ttf.fsw.font.cssAppend('');
-        //ssw.ttf.fsw.
-        ssw.ttf.font.cssLoadedLine(
-                function() {
-                    desegnu_gestojn();
-                }
-        );
-    }
-</script>
 
 ## Manlokoj
 
+<div id="manlokoj">
+
+|00|01|02|03|
+|04|05|06|07|
+|08|09|10|11|
+|12|13|14|15|
+|16|17|18|19|
+|20|21|22|23|
+|24|25|26|27|
+|28|29|30|31|
+|32|33|34|35|
+|36|37|38|39|
+|40|41|42|43|
+|44|45|46|47|
+|48|49|50|51|
+|52|53|54|55|
+|56|57|58|59|
+|60|61|62|63|
+
+</div>
+
+
+<script>
+    const abc = document.querySelectorAll("#manlokoj table tr")
+        .forEach((tr) => {
+            // kopiu la tabellinion
+            const _tr = tr.cloneNode(true);
+            // traduku al Signuno
+           for (const td of _tr.children) {
+              // trovu tekstojn de la ĉeloj en la vortaro
+              const text = "@"+td.textContent;
+              const sgn = sgn_elm[text];
+              if (sgn) {
+                td.setAttribute("data-sgn",sgn);
+              }
+           }
+           tr.insertAdjacentElement("afterend",_tr)
+        });
+
+</script>
+
+<!--
 |00|01|02|03|
 |M521x539S33b00482x483S15a10493x512|M529x525S15a20517x470S15a28471x470S31500482x483|M521x525S15a02483x478S31500482x483|M528x537S31500483x483S15b00516x510S36d00479x526|
 
@@ -143,3 +104,5 @@ https://www.sutton-signwriting.io/signmaker
 
 |60|61|62|63|
 |M518x522S2ff00482x483S15a20493x495|M518x518S2ff00482x483S15a10494x455S20500495x486|M518x518S2ff00482x483S15a12484x469|M522x521S15a20510x494S33b00482x483|
+-->
+
