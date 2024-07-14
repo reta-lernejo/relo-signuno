@@ -30,16 +30,13 @@ https://www.sutton-signwriting.io/signmaker
 
 
 function sintezo(vort) {
-    // trovu grandon de simbolo en la gesto aŭ la de la tuta gesto
-    function grando(gesto,prefikso) {
-        const re = new RegExp(`${prefikso}(\\d{3})x(\\d{3})`,'i');
-        const m = gesto.match(re);
-        if (m) {
-            // larĝo kaj alto
-            const l = parseInt(m[1]);
-            const a = parseInt(m[2]);
-            return [l,a];
-        }
+    // korekto de pozicio estu duoana grandecdiferenco
+    // tiel ke mezpunktoj koincidos
+    function delta(smb1,smb2) {
+        const g1 = ssw.ttf.fsw.symbolSize(smb1);
+        const g2 = ssw.ttf.fsw.symbolSize(smb2);
+        if (g1&&g2)
+            return [g2[0]-g1[0],g2[1]-g1[1]];
     }
 
     // trovu en vortaro
@@ -52,20 +49,19 @@ function sintezo(vort) {
         if (lf[0] == 'S') {
             // se la litero estas unuopa simbolo, ni povas
             // simple anstatŭigi la bazon (S999)
-            // sed evtl. adaptu grandecon
-            const ls = ssw.ttf.fsw.symbolSize(lf);
-            /*
-            const mg = grando(pf,'S15a[0-9a-zA-z]{2}');
-            const gg = grando(pf,'M');
-            console.debug("ls: "+ls+ " mg: "+mg);
-            const ex = Math.ceil(gg[0]+(mg[0]-ls[0])/2);
-            const ey = Math.ceil(gg[1]+(mg[1]-ls[1])/2);
-            */
+            // sed evtl. adaptu la poziciojn laŭ simbolgrandeco
+            // const ls = ssw.ttf.fsw.symbolSize(lf);
+
             const gesto = pf
-                .replace(/S15a/g,lf.substring(0,4));
-                //.replace(/^M(\d{3})x(\d{3})/,`M${ex}x${ey}`);
+                .replace(/S15a([0-9a-z]{2})(\d{3})x(\d{3})/ig,
+                    (m,s,l,a) => {
+                        const d = delta(`S15a${s}`,lf);
+                        const x = Math.trunc(parseInt(l)-d[0]/2);
+                        const y = Math.trunc(parseInt(a)-d[1]/2);
+                        const nova = `${lf.substring(0,4)}${s}${x}x${y}`;
+                        return nova;
+                    });
             return ssw.ttf.fsw.signNormalize(gesto);
-            //return gesto;
         }
         return pf; //provizore
     }
