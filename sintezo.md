@@ -149,6 +149,7 @@ function sintezo(vort) {
             lmano = (li>=0)? lp.spatials[li] : undefined;
 
             pp.spatials.forEach((s,i) => {
+
                 // ni unue anstataŭigas la manon kaj korektas la pozicion
                 if (s.symbol.substring(0,4) == 'S15a') {
                     const d = delta(s.symbol,lmano.symbol);
@@ -157,21 +158,21 @@ function sintezo(vort) {
                         Math.trunc(s.coord[1]-d[1]/2)];
 
                     s.symbol = lmano.symbol.substring(0,4)+s.symbol.substring(4,6);
-                }
 
-                // ni nun aldonas ĉiujn aliajn simbolojn el lf movante ilin...
-                const dmov = dist(s,lmano);
-                let j = trovu_smb(lp,0x205,0x2fe);
-                while (j>=0) {
-                    const s = lp.spatials[j];
-                    const coord = [
-                        Math.trunc(s.coord[0]+dmov[0]),
-                        Math.trunc(s.coord[1]+dmov[1])];
-                    pp.spatials.push({
-                        coord: coord,
-                        symbol: s.symbol
-                    });
-                    j = trovu_smb(lp,0x205,0x2fe,j+1);
+                    // ni nun aldonas ĉiujn aliajn simbolojn el lf movante ilin...
+                    const dmov = dist(s,lmano);
+                    let j = trovu_smb(lp,0x205,0x2fe);
+                    while (j>=0) {
+                        const s = lp.spatials[j];
+                        const coord = [
+                            Math.trunc(s.coord[0]-dmov[0]),
+                            Math.trunc(s.coord[1]-dmov[1])];
+                        pp.spatials.push({
+                            coord: coord,
+                            symbol: s.symbol
+                        });
+                        j = trovu_smb(lp,0x205,0x2fe,j+1);
+                    }
                 }
             });
 
