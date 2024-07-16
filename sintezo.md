@@ -1,6 +1,6 @@
 ---
 layout: signuno
-title: Signuno - lokoj
+title: Signuno - sintezo
 js:
     - sgn_elm
     - sgn_vrt
@@ -23,13 +23,17 @@ https://www.sutton-signwriting.io/signmaker
 
 |onkl|tremp|triumf|
 
+|stult|teori|absurd|
+
+|mi|parol|gestolingv|
+
 </div>
 
 
 <script>
 
 
-function sintezo(vort) {
+function sintezo(formulo) {
     // korekto de pozicio estu duona grandecdiferenco
     // tiel ke mezpunktoj koincidos
     function delta(s1,s2) {
@@ -85,7 +89,6 @@ function sintezo(vort) {
     }
 
     // trovu en vortaro
-    const formulo = sgn_vrt[vort];
     if (formulo) {
         const pj = formulo.split('@');
         // literformulo (a..Z)
@@ -204,9 +207,12 @@ signune(()=>{
               // trovu tekstojn de la ĉeloj en la vortaro
               // forigu (...) antaŭe
               const text = td.textContent;
-              const sgn = sintezo(text);
-              if (sgn) {
-                td.setAttribute("data-sgn",sgn);
+              const frm = sgn_vrt[text];
+              const sgn = sintezo(frm);
+
+              if (frm && sgn) {
+                td.setAttribute("data-frm",frm);
+                td.setAttribute("data-sgn",sgn+"-C");
               }
            }
            tr.insertAdjacentElement("afterend",_tr)
