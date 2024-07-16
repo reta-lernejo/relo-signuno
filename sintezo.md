@@ -32,9 +32,9 @@ https://www.sutton-signwriting.io/signmaker
 function sintezo(vort) {
     // korekto de pozicio estu duona grandecdiferenco
     // tiel ke mezpunktoj koincidos
-    function delta(smb1,smb2) {
-        const g1 = ssw.ttf.fsw.symbolSize(smb1);
-        const g2 = ssw.ttf.fsw.symbolSize(smb2);
+    function delta(s1,s2) {
+        const g1 = ssw.ttf.fsw.symbolSize(s1);
+        const g2 = ssw.ttf.fsw.symbolSize(s2);
         if (g1&&g2)
             return [g2[0]-g1[0],g2[1]-g1[1]];
     }
@@ -57,36 +57,29 @@ function sintezo(vort) {
     location 	    S37f - S386 	U+4EFA1 -U+4F2A0
     punctuation 	S387 - S38b 	U+4F2A1 -U+4F480
     */
-    function trovu_smb(gesto,i0=0,xde=0x15a,xal=0x15a) {
-        let i = i0;
-        let S = gesto.indexOf('S',i0);
-        while (S>=i) {
-            const hex = parseInt(gesto.substring(S+1,S+4),16);
-            if (xde <= hex && hex <= xal && S+12 < gesto.length) {
-                return S;
-            } else {
-                i = S+12;
-                S = gesto.indexOf('S',i);
-            }
+    function trovu_smb(parsed,xde=0x15a,xal=0x15a,i0=0) {
+        for (let i=i0; i<parsed.spatials.length; i++) {
+            const s = parsed.spatials[i];
+            const hex = parseInt(s.symbol.substring(1,4),16)
+            if (xde <= hex && hex <= xal) {
+                return i;
+            };
         }
+        return -1;
     }
 
-    // distanco inter la mezpunktoj de du
-    // simboloj, donitaj per ties indeksoj en gestoj,
-    // (tiom ni ŝovas ĉiujn
-    // simbolojn, kiujn ni volas enmeti en la geston)
-    function dist(S1,gesto1,S2,gesto2) {
-        if (S1>0 && S2>0 && S1+12<gesto1.length && S2+12<gesto2.length) {
-            const smb1 = gesto1.substring(S1,S1+12);
-            const smb2 = gesto2.substring(S2,S1+12);
+    // distanco inter la mezpunktoj de du simboloj
+    // (tiom ni ŝovas ĉiujn simbolojn, kiujn ni volas enmeti en la geston)
+    function dist(s1,s2) {
+        if (s1 && s2) {
             // simbolgrandcoj
-            const g1 = ssw.ttf.fsw.symbolSize(smb1.substring(0,6));
-            const g2 = ssw.ttf.fsw.symbolSize(smb2.substring(0,6));
+            const g1 = ssw.ttf.fsw.symbolSize(s1.symbol);
+            const g2 = ssw.ttf.fsw.symbolSize(s2.symbol);
             // simbolmezpunktoj
-            const M1 = [parseInt(smb1.substring(6,9))+g1[0]/2,
-                        parseInt(smb1.substring(10,13))+g1[1]/2];
-            const M2 = [parseInt(smb2.substring(6,9))+g2[0]/2,
-                        parseInt(smb2.substring(10,13))+g2[1]/2];
+            const M1 = [s1.coord[0]+g1[0]/2,
+                        s1.coord[1]+g1[1]/2];
+            const M2 = [s2.coord[0]+g2[0]/2,
+                        s2.coord[1]+g2[1]/2];
             return [M2[0]-M1[0],M2[1]-M1[1]];
         }
     }
@@ -101,6 +94,26 @@ function sintezo(vort) {
         const pf = sgn_elm['@'+pj[1]];
         console.debug("l: "+lf+ " p: "+pf);
         if (lf[0] == 'S') {
+
+            // analizu la literon kaj la manlokon (geston)
+            lp = ssw.fsw.parse.symbol(lf);
+            pp = ssw.fsw.parse.sign(pf);
+
+            pp.spatials.forEach((s,i) => {
+                if (s.symbol.substring(0,4) == 'S15a') {
+                    // anstataŭigu la platan manon per la speciala mansigno de la litero
+                    const d = delta(s.symbol,lp.symbol); // grandecdiferenco de la du mansignoj
+                    // korektu je duono de d
+                    s.coord = [
+                        Math.trunc(s.coord[0]-d[0]/2),
+                        Math.trunc(s.coord[1]-d[1]/2)];
+
+                    s.symbol = lp.symbol.substring(0,4)+s.symbol.substring(4,6);
+                    //pp.spatials[i] = s;
+                }
+            });
+            return ssw.ttf.fsw.signNormalize(ssw.fsw.compose.sign(pp));
+/*
             // se la litero estas unuopa simbolo, ni povas
             // simple anstatŭigi la bazon (S999)
             // sed evtl. adaptu la poziciojn laŭ simbolgrandeco
@@ -114,6 +127,7 @@ function sintezo(vort) {
                         return nova;
                     });
             return ssw.ttf.fsw.signNormalize(gesto);
+            */
         } else {
             // se la litero konsistas el kelkaj simboloj (ekz-mano+movo),
             // ni devas ĉiujn kopii kune, sed reletive al la mezpunktoj
@@ -123,10 +137,45 @@ function sintezo(vort) {
             // la aliaj estas supoze la fingro/manmovaj simboloj
             //lf.match(/S[12])...
 
-            const M1 = trovu_smb(pf,8,0x15a,0x15a);
-            const M2 = trovu_smb(lf,8,0x100,0x204);
-            const dmov = dist(M1,pf,M2,lf);
+            // analizu la litersignon kaj la manlokon (geston)
+            lp = ssw.fsw.parse.sign(lf);
+            pp = ssw.fsw.parse.sign(pf);
 
+            //const gmano = trovu_smb(pp,0x15a,0x15a);
+
+            // la litersignoj havu nur unu manosimbolon
+            // la aliaj estas movoj
+            const li = trovu_smb(lp,0x100,0x204);
+            lmano = (li>=0)? lp.spatials[li] : undefined;
+
+            pp.spatials.forEach((s,i) => {
+                // ni unue anstataŭigas la manon kaj korektas la pozicion
+                if (s.symbol.substring(0,4) == 'S15a') {
+                    const d = delta(s.symbol,lmano.symbol);
+                    s.coord = [
+                        Math.trunc(s.coord[0]-d[0]/2),
+                        Math.trunc(s.coord[1]-d[1]/2)];
+
+                    s.symbol = lmano.symbol.substring(0,4)+s.symbol.substring(4,6);
+                }
+
+                // ni nun aldonas ĉiujn aliajn simbolojn el lf movante ilin...
+                const dmov = dist(s,lmano);
+                let j = trovu_smb(lp,0x205,0x2fe);
+                while (j>=0) {
+                    const s = lp.spatials[j];
+                    const coord = [
+                        Math.trunc(s.coord[0]+dmov[0]),
+                        Math.trunc(s.coord[1]+dmov[1])];
+                    pp.spatials.push({
+                        coord: coord,
+                        symbol: s.symbol
+                    });
+                    j = trovu_smb(lp,0x205,0x2fe,j+1);
+                }
+            });
+
+/*
             // ni unue anstataŭigas la manon kaj korektas la pozicion
             let gesto = pf
                 .replace(/S15a([0-9a-z]{2})(\d{3})x(\d{3})/ig,
@@ -134,24 +183,12 @@ function sintezo(vort) {
                         const d = delta(`S15a${s}`,lf.substring(M2,M2+6));
                         const x = Math.trunc(parseInt(l)-d[0]/2);
                         const y = Math.trunc(parseInt(a)-d[1]/2);
-                        const nova = `${lf.substring(M1,3)}${s}${x}x${y}`;
+                        const nova = `${lf.substring(M1,M1+4)}${s}${x}x${y}`;
                         return nova;
                     });
+*/
 
-            // ni nun aldonas ĉiujn aliajn simbolojn el lf movante ilin...
-            let i = 8;
-            let S1 = trovu_smb(lf,i,0x205,0x2fe);
-            while (S1>=i) {
-                const x = Math.trunc(parseInt(lf.substring(S1+6,S1+3)+dmov[0]));
-                const y = Math.trunc(parseInt(lf.substring(S1+10,S1+13)+dmov[1]));
-                // alpendigu al gesto
-                gesto += `${lf.substring(S1,5)}${x}x${y}`;
-                // serĉu sekvan
-                i = S1+12;
-                S1 = trovu_smb(lf,i,0x205,0x2fe);
-            }
-
-            return ssw.ttf.fsw.signNormalize(gesto);
+            return ssw.ttf.fsw.signNormalize(ssw.fsw.compose.sign(pp));
         }
     }
 }
