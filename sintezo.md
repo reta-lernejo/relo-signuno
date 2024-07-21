@@ -18,22 +18,32 @@ https://www.sutton-signwriting.io/signmaker
 
 <div id="gestoj">
 
+
+|kio|
+
+
+<!--
 |admon|akv|asert|
 |ŝalm|vers|vin|
 
-|onkl|tremp|triumf|
+|onkl|hom|triumf|
 
 |stult|teori|absurd|
 
 |mi|parol|gestolingv|
 
-</div>
+|unu|tri|dek|
 
+|tiu|kio|neniam|
+-->
+
+</div>
 
 <script>
 
-
 function sintezo(formulo) {
+    re_frm = /^([a-zA-Z])@(\d\d)([*\\/\$~+-=#_^]{0,2})$/;
+
     // korekto de pozicio estu duona grandecdiferenco
     // tiel ke mezpunktoj koincidos
     function delta(s1,s2) {
@@ -88,19 +98,14 @@ function sintezo(formulo) {
         }
     }
 
-    // trovu en vortaro
-    if (formulo) {
-        const pj = formulo.split('@');
-        // literformulo (a..Z)
-        const lf = sgn_elm[pj[0]]
-        // poziciformulo (@00..@64)
-        const pf = sgn_elm['@'+pj[1]];
-        console.debug("l: "+lf+ " p: "+pf);
+    function mansintezo(lf,pf) {
+
+        let pp = ssw.fsw.parse.sign(pf);
+
         if (lf[0] == 'S') {
 
             // analizu la literon kaj la manlokon (geston)
-            lp = ssw.fsw.parse.symbol(lf);
-            pp = ssw.fsw.parse.sign(pf);
+            const lp = ssw.fsw.parse.symbol(lf);
 
             pp.spatials.forEach((s,i) => {
                 if (s.symbol.substring(0,4) == 'S15a') {
@@ -115,7 +120,6 @@ function sintezo(formulo) {
                     //pp.spatials[i] = s;
                 }
             });
-            return ssw.ttf.fsw.signNormalize(ssw.fsw.compose.sign(pp));
 /*
             // se la litero estas unuopa simbolo, ni povas
             // simple anstatŭigi la bazon (S999)
@@ -141,8 +145,7 @@ function sintezo(formulo) {
             //lf.match(/S[12])...
 
             // analizu la litersignon kaj la manlokon (geston)
-            lp = ssw.fsw.parse.sign(lf);
-            pp = ssw.fsw.parse.sign(pf);
+            const lp = ssw.fsw.parse.sign(lf);
 
             //const gmano = trovu_smb(pp,0x15a,0x15a);
 
@@ -191,9 +194,37 @@ function sintezo(formulo) {
                         return nova;
                     });
 */
-
-            return ssw.ttf.fsw.signNormalize(ssw.fsw.compose.sign(pp));
         }
+        return pp;
+    }
+
+    // trovu en vortaro
+    if (formulo) try {
+        const fm = re_frm.exec(formulo);
+
+        // literformulo (a..Z)
+        const lf = fm[1]? sgn_elm[fm[1]]: undefined
+        // poziciformulo (manlokoj @00..@64)
+        const pf = fm[2]? sgn_elm['@'+fm[2]]: undefined;
+        // aldona movo/tuŝo ks
+        const mf = fm[3]? sgn_elm[fm[3]]: undefined;
+
+        console.debug("l: "+lf+ " p: "+pf);
+
+        const gesto = mansintezo(lf,pf);
+
+        // se ĉe estas movsigno aldonu ĝin
+        if (mf) {
+            gesto.spatials.push({
+                coord: [500,500],
+                symbol: mf
+            });
+        }
+
+        return ssw.ttf.fsw.signNormalize(ssw.fsw.compose.sign(gesto));
+
+    } catch(error) {
+        console.error(error)
     }
 }
 
@@ -210,10 +241,8 @@ signune(()=>{
               const frm = sgn_vrt[text];
               const sgn = sintezo(frm);
 
-              if (frm && sgn) {
-                td.setAttribute("data-frm",frm);
-                td.setAttribute("data-sgn",sgn+"-C");
-              }
+              if (frm) td.setAttribute("data-frm",frm);
+              if (sgn) td.setAttribute("data-sgn",sgn); //+"-C");
            }
            tr.insertAdjacentElement("afterend",_tr)
         });

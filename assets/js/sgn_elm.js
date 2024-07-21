@@ -1,4 +1,6 @@
 const sgn_elm = {
+
+    // minuskla (ordinara) alfabeto
     "a": "S1f820",
     "b": "S14720",
     "c": "S16d20",
@@ -37,6 +39,8 @@ const sgn_elm = {
     "x": "S10620",
     "y": "S19a20",
    
+    // majuskla alfabeto, uzata por sintezo de vort-gestoj
+
     "A": "M508x514S22802494x504S17620492x486",
     "B": "M506x517S15a20494x490S22104494x483",
     "C": "S17720",
@@ -68,7 +72,36 @@ const sgn_elm = {
     "W": "M508x517S15520493x491S22200494x483",
     "X": "M508x519S10e20493x489S22600497x482",
     "Y": "M508x517S15420493x492S22204495x483",
-    
+
+    // movoj, uzataj por gramatikaj indikoj
+    // dependas iom de la manloko, ĉu okazas tuŝo, viŝo, froto aŭ nur manmovo
+    "*": "S20500", // tuŝ: -o kaj -'
+    "**": "S20600", // tuŝ-tuŝ: oj
+    "$": "S21100", // frot (aŭ "S20e00" - viŝ?): -on, -n
+    "$$": "S21200", // frot-frot (aŭ "S20f0" - viŝviŝ?): -ojn
+
+    "/": "S26506", // alekstera moveto: adj,pron -a, -u
+    "//": "S26606", // alekstera movo: adj,pron -aj, -uj
+
+    "\\": "S26502", // alinterna moveto: adj,pron -an, -un
+    "\\\\": "S26602", // alinterna movo: adj,pron -ajn, -ujn
+
+    // verbaj formoj
+    "\\/": "S28806", // alekstera valeta movo: -is
+    "--": "S22b06", // alekstera rekta movo: -as
+    "/\\": "S2880a", // alekstera monteta movo: -os
+    "~~": "S2920a", // alekstera oscila movo: -us
+    "=": "S22f06", // dufoja alekstera rekta moveto: -u
+    "-": "S22a06", // alekstera rekta moveto: -i
+
+    "~": "S22b02", // alinterna rekta movo: -en (tien, hejmen...)
+    "#": "S2e300", // cirkla movo: -e (tie, hejme...)
+
+    "_": "", // neniu aldona movo krom transiro de unu al alia gesto
+    "+": "23302", // krucmova transiro inter du gestoj
+    "^": "S23b0d", // pintmova transiro inter du gestoj
+
+    // 64 manlokoj, uzataj por sintezo de vort-gestoj    
     "@00": "M521x539S33b00482x483S15a10493x512",
     "@01": "M529x525S15a20517x470S15a28471x470S31500482x483",
     "@02": "M521x525S15a02483x478S31500482x483",
