@@ -19,7 +19,7 @@ https://www.sutton-signwriting.io/signmaker
 <div id="gestoj">
 
 
-|kio|
+|kio|vi|far|
 
 
 <!--
@@ -213,7 +213,7 @@ function sintezo(formulo) {
 
         const gesto = mansintezo(lf,pf);
 
-        // se ĉe estas movsigno aldonu ĝin
+        // se ĉestas movsigno aldonu ĝin
         if (mf) {
             gesto.spatials.push({
                 coord: [500,500],

@@ -1,6 +1,15 @@
+/**
+ * Sintezas geston kiel SuttonsSignWriting el elementoj laŭ donita Signuno-kodo
+ * 
+ * vd. 
+ * - https://web.archive.org/web/20230819144154/https://signuno.webs.com/
+ * - https://web.archive.org/web/20230819151011/http://signuno.webs.com/signuno.pdf
+ * - https://github.com/sutton-signwriting
+ */
+
 class Gesto {
 
-    static re_sgn = /^([a-zA-Z])@(\d\d)([*\\/\$~+-=#_^]{0,2})$/;
+    static re_sgn = /^([a-zA-Z])(@\d\d)([*\\/\$~+-=#_^]{0,2})$/;
 
     /**
      * Redonas la diferencon inter la grandeco de du
@@ -50,17 +59,12 @@ class Gesto {
     constructor(kodo) {
         this.kodo = kodo;
 
-        const fm = re_sgn.exec(kodo);
+        const fm = Gesto.re_sgn.exec(kodo);
         if (fm) {
             this.litero = fm[1];
             this.loko = fm[2];
             this.movo = fm[3];
         }
-
-        // la sintezita gesto, ni komencas per la manloko
-        // kaj poste ŝanĝas ties mano(j) al la litersigno kaj
-        // aldonas evtl. movojn
-        this.gesto = this.loko;
     }
 
     /**
@@ -69,10 +73,44 @@ class Gesto {
      */
     preparo() {
         if (ssw && ssw.ttf.fsw) {
-            if (this.manloko) this.lok_fsw = ssw.fsw.parse.sign(this.loko);
-            if (this.litero) this.lit_fsw = this.litero[0] == 'S'? ssw.fsw.parse.symbol(this.litero) : ssw.fsw.parse.sign(this.litero);
-            if (this.movo) this.mov_fsw = this.mov[0] == 'S'? ssw.fsw.parse.symbol(this.movo) : ssw.fsw.parse.sign(this.movo);
+            if (this.loko) {
+                this.lok_fsw = sgn_elm[this.loko];
+                this.lok_ssw = ssw.fsw.parse.sign(this.lok_fsw);
+                // la sintezita gesto, ni komencas per la manloko
+                // kaj poste ŝanĝas ties mano(j) al la litersigno kaj
+                // aldonas evtl. movojn
+                this.gesto_ssw = this.lok_ssw;
+            }
+            if (this.litero) {
+                this.lit_fsw = sgn_elm[this.litero];
+                this.lit_ssw = this.lit_fsw[0] == 'S'? ssw.fsw.parse.symbol(this.lit_fsw) : ssw.fsw.parse.sign(this.lit_fsw);
+            }
+            if (this.movo) {
+                this.mov_fsw = sgn_elm[this.movo];
+                this.mov_ssw = this.mov_fsw[0] == 'S'? ssw.fsw.parse.symbol(this.mov_fsw) : ssw.fsw.parse.sign(this.mov_fsw);
+            }
         }
+    }
+
+    /**
+     * Redonas la geston kiel JSON-strukturo laŭ https://github.com/sutton-signwriting/core
+     */
+    gesto_ssw() {
+        return this.gesto_ssw;
+    }
+
+    /**
+     * Redonas la geston kiel FSW (Askio)
+     */
+    gesto_fsw() {
+        return ssw.ttf.fsw.signNormalize(ssw.fsw.compose.sign(this.gesto_ssw));
+    }
+
+    /**
+     * Redonas la geston kiel SVG (vektorgrafiko kun TTF-tiparo)
+     */
+    gesto_svg() {
+        ssw.ttf.fsw.signSvg(this.gesto_fsw());
     }
 
 
@@ -96,7 +134,7 @@ class Gesto {
         punctuation 	S387 - S38b 	U+4F2A1 -U+4F480
     */
     *simboloj(fsw, xde=0x15a, xal=0x15a) {
-        for (let i=i0; i<fsw.spatials.length; i++) {
+        for (let i=0; i<fsw.spatials.length; i++) {
             const s = fsw.spatials[i];
             const hex = parseInt(s.symbol.substring(1,4),16)
             if (xde <= hex && hex <= xal) {
@@ -111,7 +149,7 @@ class Gesto {
      * fiksa pozicio, kaj do ne estas simbolo de sepco S15a, ĝi ne kalkuliĝas.
      */
     manoj() {
-        const manoj = this.simboloj(this.lok_fsw);
+        const manoj = this.simboloj(this.lok_ssw);
         return manoj.toArray();
     }
 
@@ -130,14 +168,14 @@ class Gesto {
      */
     mansintezo() {
 
-        const manoj = this.simboloj(this.gesto);
+        const manoj = this.simboloj(this.gesto_ssw);
         for (const man of manoj) {
 
-            if (this.lit_fsw.spatials) {
+            if (! this.lit_ssw.spatials) {
             // se la litersigno konsistas el sola mano (sen aldonaj signoj, ekz. fingroklino)
 
                 // anstataŭigu la platan manon per la speciala mansigno de la litero
-                const litsmb = this.lit_fsw.symbol;
+                const litsmb = this.lit_ssw.symbol;
                 const d = Gesto.delto(man.symbol,litsmb); 
                 // korektu je duono de d
                 man.coord = [
@@ -153,7 +191,7 @@ class Gesto {
 
                 // ni unue trovu la mansimbolon (S100..S204) en litero
                 // la aliaj estas supoze la fingro/manmovaj simboloj
-                const lman = this.simboloj(this.lit_fsw,0x100,0x204).next();
+                const lman = this.simboloj(this.lit_ssw,0x100,0x204).next();
 
                 // ni unue anstataŭigas la manon kaj korektas la pozicion
                 const d = Gesto.delto(man.symbol,lman.symbol);
@@ -166,14 +204,14 @@ class Gesto {
 
                 // ni nun aldonas ĉiujn aliajn simbolojn el lf movante ilin...
                 const dmov = Gesto.mezdistanco(man,lman);
-                const lsmbj = this.simboloj(this.lit_fsw,0x205,0x2fe);
+                const lsmbj = this.simboloj(this.lit_ssw,0x205,0x2fe);
 
                 for (const ls of lsmbj) {
                     const coord = [
                         Math.trunc(ls.coord[0] - dmov[0]),
                         Math.trunc(ls.coord[1] - dmov[1])
                     ];
-                    this.gesto.push({
+                    this.gesto_ssw.push({
                         coord: coord,
                         symbol: ls.symbol
                     });
