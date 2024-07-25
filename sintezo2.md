@@ -2,7 +2,6 @@
 layout: signuno
 title: Signuno - sintezo
 js:
-    - sgn_elm
     - sgn_vrt
     - signuno
 css:
@@ -45,7 +44,7 @@ https://www.sutton-signwriting.io/signmaker
 function sintezo(formulo) {
     const g = new Gesto(formulo);
     g.preparo();
-    g.mansintezo();
+    g.sintezo();
     return g.gesto_fsw();
 }
 

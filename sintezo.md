@@ -2,7 +2,7 @@
 layout: signuno
 title: Signuno - sintezo
 js:
-    - sgn_elm
+    - signuno
     - sgn_vrt
 css:
     - sign
@@ -203,11 +203,11 @@ function sintezo(formulo) {
         const fm = re_frm.exec(formulo);
 
         // literformulo (a..Z)
-        const lf = fm[1]? sgn_elm[fm[1]]: undefined
+        const lf = fm[1]? Gesto.sgn_elm[fm[1]]: undefined
         // poziciformulo (manlokoj @00..@64)
-        const pf = fm[2]? sgn_elm['@'+fm[2]]: undefined;
+        const pf = fm[2]? Gesto.sgn_elm['@'+fm[2]]: undefined;
         // aldona movo/tuŝo ks
-        const mf = fm[3]? sgn_elm[fm[3]]: undefined;
+        const mf = fm[3]? Gesto.sgn_elm[fm[3]]: undefined;
 
         console.debug("l: "+lf+ " p: "+pf);
 

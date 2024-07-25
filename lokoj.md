@@ -2,7 +2,7 @@
 layout: signuno
 title: Signuno - lokoj
 js:
-    - sgn_elm
+    - signuno
 css:
     - sign
 ---
@@ -46,7 +46,7 @@ https://www.sutton-signwriting.io/signmaker
            for (const td of _tr.children) {
               // trovu tekstojn de la ĉeloj en la vortaro
               const text = "@"+td.textContent;
-              const sgn = sgn_elm[text];
+              const sgn = Gesto.sgn_elm[text];
               if (sgn) {
                 td.setAttribute("data-sgn",sgn);
               }
