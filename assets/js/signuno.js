@@ -11,6 +11,9 @@ class Gesto {
 
     static re_sgn = /^([a-zA-Z])(@\d\d)([*\\/\$~+-=#_^]{0,2})$/;
 
+    /**
+     * La elementoj de signuno: manalfabeto (a-z,A-Z), movsignoj, manlokoj (@00..@64)
+     */
     static sgn_elm = {
 
         // minuskla (ordinara) alfabeto

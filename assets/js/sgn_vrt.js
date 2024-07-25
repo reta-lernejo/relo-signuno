@@ -1,3 +1,9 @@
+function sgn_vortaro(vrt) {
+    const sgn = sgn_vrt[vrt];
+    if (typeof sgn == "string") return sgn;
+    if (sgn instanceof Array) return sgn[0];
+}
+
 sgn_vrt = {
 
  //korelativoj, Signuno.pdf, p.23
@@ -964,8 +970,7 @@ sgn_vrt = {
  "uj": "u@14",
  "um": "m@14",
  "verŝ": "c@14",
- "vi": "g@14",
- "vi": "S@14",
+ "vi": ["g@14","S@14"],
 
  "boat": "P@15",
  "ĉiu": "S@15",

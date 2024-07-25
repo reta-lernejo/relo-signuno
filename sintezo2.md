@@ -14,7 +14,11 @@ https://www.sutton-signwriting.io/signmaker
 -->
 
 
-## Manlokoj
+## Signuno
+
+<input id="vortoj" name="vortoj" list="sgn_vrt"/>
+
+<datalist id="sgn_vrt"></datalist>
 
 <div id="gestoj">
 
@@ -41,6 +45,17 @@ https://www.sutton-signwriting.io/signmaker
 
 <script>
 
+function vortaro() {
+    const sv = document.getElementById("sgn_vrt");
+    for (const v in sgn_vrt) {
+        const o = document.createElement("option");
+        o.textContent = v;
+        sv.append(o)
+    }
+}
+
+vortaro();
+
 function sintezo(formulo) {
     const g = new Gesto(formulo);
     g.preparo();
@@ -58,7 +73,7 @@ signune(()=> {
               // trovu tekstojn de la ĉeloj en la vortaro
               // forigu (...) antaŭe
               const text = td.textContent;
-              const frm = sgn_vrt[text];
+              const frm = sgn_vortaro(text);
               const sgn = sintezo(frm);
 
               if (frm) td.setAttribute("data-frm",frm);

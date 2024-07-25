@@ -238,7 +238,7 @@ signune(()=>{
               // trovu tekstojn de la ĉeloj en la vortaro
               // forigu (...) antaŭe
               const text = td.textContent;
-              const frm = sgn_vrt[text];
+              const frm = sgn_vortaro(text);
               const sgn = sintezo(frm);
 
               if (frm) td.setAttribute("data-frm",frm);
