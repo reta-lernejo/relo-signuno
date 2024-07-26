@@ -2,8 +2,9 @@
 layout: signuno
 title: Signuno - sintezo
 js:
-    - sgn_vrt
-    - signuno
+    - folio-0c
+    - sgn_vrt-0a
+    - signuno-0a
 css:
     - sign
 ---
@@ -13,37 +14,34 @@ css:
 https://www.sutton-signwriting.io/signmaker
 -->
 
-
-## Signuno
-
+Trovu vorton en la vortaro:
 <input id="vortoj" name="vortoj" list="sgn_vrt"/>
-
 <datalist id="sgn_vrt"></datalist>
 
-<div id="gestoj">
+kaj laŭbezone aldonu finaĵon:  
+()-as ()-is ()-os ()-i ()-u  
+()-o ()-on ()-oj ()-ojn  
+()-a ()-an ()-aj ()-ajn  
+()-e ()-en
+{: .elekto #fino}
 
+Signuno: <span id="signuno"></span>
 
-|kio|vi|far|
+|manloko|litero|movo|
+|__manloko__|__litero__|__movo__|
 
+|sintezo|
+|__sintezo__|
 
-<!--
-|admon|akv|asert|
-|ŝalm|vers|vin|
+|eo|sgn|
 
-|onkl|hom|triumf|
-
-|stult|teori|absurd|
-
-|mi|parol|gestolingv|
-
-|unu|tri|dek|
-
-|tiu|kio|neniam|
--->
-
-</div>
 
 <script>
+
+elekte((elekto,valoro) => {
+  console.log(elekto+':'+valoro);
+});
+
 
 function vortaro() {
     const sv = document.getElementById("sgn_vrt");

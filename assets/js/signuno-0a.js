@@ -1,3 +1,123 @@
+/*** kelkaj helpfunkcioj por krei kaj prezenti la signojn de SuttonSignWRiting sur la paĝo ***/
+
+function sign_wait(el) {
+  // move elements content (sign FSW) to an attribute
+  // and replace by a waiting symbol
+  const waiting = "🖐\uFE0E";
+  const sign = el.textContent;
+  if (sign.match(/^(?:M\d{3}x\d{3}|S[\da-f]{5})/)) {
+    el.setAttribute("data-sgn",el.textContent);
+    el.textContent = waiting;
+  }
+}
+
+function sign_render(el) {
+  const sign = el.getAttribute("data-sgn");
+  if (sign) {
+    if (sign.match(/^M\d{3}/)) {
+        el.setAttribute("data-sgn",sign);
+        el.innerHTML = ssw.ttf.fsw.signSvg(sign);
+    } else if (sign.match(/^S[\da-f]{5}/)) {
+        el.setAttribute("data-sgn",sign);
+        el.innerHTML = ssw.ttf.fsw.symbolSvg(sign);
+    } 
+  }
+}
+
+function scale_svg(svg,procent) {
+  // get height and width from svg viewBox
+  const viewBox = svg.getAttribute("viewBox");
+  const n4 = viewBox.split(" ");
+  const width = parseFloat(n4[2]);
+  const height = parseFloat(n4[3]);
+  // set width to a scaled value
+  //svg.setAttribute("preserveAspectRatio","XMidYMin slice");
+  svg.setAttribute("height",height*procent/100)
+  svg.setAttribute("width",width*procent/100)
+}
+
+//let _lanĉtaskoj = []; 
+let _signuntaskoj = []; 
+
+
+/**
+ * Kolektas funkciojn, kiuj vokiĝos tuj post kiam la dokumento estas ŝargita.
+ */
+// function lanĉe(tasko) {
+//     _lanĉtaskoj.push(tasko);
+// }
+
+
+/**
+ * Kolektas funkciojn, kiuj vokiĝos tuj post kiam la dokumento estas ŝargita.
+ */
+function signune(tasko,poz) {
+    if (poz !== undefined)
+    _signuntaskoj.splice(poz,0,tasko);
+    else
+    _signuntaskoj.push(tasko);
+}
+
+
+// document.body.style.cursor = 'progress';
+
+/**
+ * Plenumas lanĉo-taskojn
+ */
+let wol;
+if (window.onload instanceof Function) {
+  wol = window.onload
+}
+window.onload = () => {
+  if (wol) wol();
+  
+  try {
+      // plenumu ĉiujn lanĉ-taskojn
+      // ni faros intence fine, t.e. post kreo de elektiloj kaj butonoj
+
+      // set waiting symbols
+      //document.querySelectorAll("dd,td,li,.sign").forEach((el) => sign_wait(el));
+
+      // trigger sign rendering
+      ssw.ttf.font.cssAppend(''); 
+      ssw.ttf.font.cssLoadedLine(() => {   
+        for (t of _signuntaskoj) { t(); }  
+      }); 
+              
+      // setup scaler
+      /*
+      const scaler = document.getElementById("scale");
+      if (scaler) scaler.addEventListener("input", (event) => {
+        const procent = event.target.value||100;
+        const label = document.getElementById("scale_pct");
+        label.textContent = `${procent}%`;
+
+        // scale SVGs
+        document.querySelectorAll(".signs svg").forEach((svg) => {
+          scale_svg(svg,procent);
+        });
+        // scale ul font
+        document.querySelectorAll(".signs>ul").forEach((ul) => {
+          ul.style.fontSize = `${24*procent/100}px`;
+        });          
+      });
+      */
+  }
+  finally {
+      document.body.style.cursor = 'default';
+  }
+}
+
+/*
+signune(()=>{
+  document.querySelectorAll("dd,td,li,.sign").forEach((el) => sign_render(el));
+})
+*/
+
+
+
+
+
 /**
  * Sintezas geston kiel SuttonsSignWriting el elementoj laŭ donita Signuno-kodo
  * 
