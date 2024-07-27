@@ -14,8 +14,16 @@ css:
 https://www.sutton-signwriting.io/signmaker
 -->
 
+<style>
+    .akc {
+        background-color: lightskyblue;
+        padding: .2em;
+        border-radius: 4px;
+    }
+</style>
+
 Trovu vorton en la vortaro:
-<input id="vortoj" name="vortoj" list="sgn_vrt"/>
+<input id="vortaro" name="vortaro" list="sgn_vrt"/>
 <datalist id="sgn_vrt"></datalist>
 
 kaj laŭbezone aldonu finaĵon:  
@@ -25,23 +33,18 @@ kaj laŭbezone aldonu finaĵon:
 ()-e ()-en
 {: .elekto #fino}
 
-Signuno: <span id="signuno"></span>
+Vorto: <span id="vorto" class="akc"></span>
 
-|manloko|litero|movo|
-|__manloko__|__litero__|__movo__|
+|litero: <span id="s_litero" class="akc"></span>|manloko: <span id="s_loko" class="akc"></span>|movo: <span id="s_movo" class="akc"></span>|
+|<span id="ssw_litero"></span>|<span id="ssw_loko"></span>|<span id="ssw_movo"></span>|
 
-|sintezo|
-|__sintezo__|
+|sintezo <span id="s_signo" class="akc"></span>|
+|<span id="ssw_signo"></span>|
 
 |eo|sgn|
 
 
 <script>
-
-elekte((elekto,valoro) => {
-  console.log(elekto+':'+valoro);
-});
-
 
 function vortaro() {
     const sv = document.getElementById("sgn_vrt");
@@ -54,11 +57,44 @@ function vortaro() {
 
 vortaro();
 
-function sintezo(formulo) {
-    const g = new Gesto(formulo);
-    g.preparo();
-    g.sintezo();
-    return g.gesto_fsw();
+kiam("change","#vortaro",sintezo);
+
+let gesto, fino;
+
+elekte((elekto,valoro) => {
+  console.log(elekto+':'+valoro);
+  fino = valoro;
+  sintezo();
+});
+
+function sintezo() {
+    const vrt = document.getElementById("vortaro").value;
+    document.getElementById("vorto").textContent = `${vrt||''}${fino||''}`
+    let sgn = sgn_vortaro(vrt);
+    if (sgn) {
+        if (fino) {
+            const fin = sgn_vortaro(fino);
+            if (fin) sgn += fin;
+        }
+        sintezo_ssw(sgn);
+    }
+}
+
+function sintezo_ssw(sgn) {
+    gesto = new Gesto(sgn);
+    // montru la elementojn de la Signunokodo
+    document.getElementById("s_signo").textContent = sgn;
+    document.getElementById("s_loko").textContent = gesto.loko;
+    document.getElementById("s_litero").textContent = gesto.litero;
+    document.getElementById("s_movo").textContent = gesto.movo;
+
+    // prezentu la geston
+    gesto.preparo();
+    gesto.sintezo();
+    document.getElementById("ssw_litero").innerHTML = gesto.litero_svg();
+    document.getElementById("ssw_loko").innerHTML = gesto.loko_svg();
+    document.getElementById("ssw_movo").innerHTML = gesto.movo_svg();
+    document.getElementById("ssw_signo").innerHTML = gesto.gesto_svg();
 }
 
 signune(()=> {

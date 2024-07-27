@@ -123,6 +123,7 @@ td:first-of-type {
 }
 */
 
+/*
 td:nth-of-type(2) {
     text-align: center;
 }
@@ -130,6 +131,7 @@ td:nth-of-type(2) {
 td:nth-of-type(2) span {
     display: none;
 }
+*/
 
 @media print {
     /*header*/

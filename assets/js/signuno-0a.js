@@ -419,9 +419,22 @@ class Gesto {
      * Redonas la geston kiel SVG (vektorgrafiko kun TTF-tiparo)
      */
     gesto_svg() {
-        ssw.ttf.fsw.signSvg(this.gesto_fsw());
+        return ssw.ttf.fsw.signSvg(this.gesto_fsw());
     }
 
+    loko_svg() {
+        return ssw.ttf.fsw.signSvg(this.lok_fsw);
+    }
+
+    litero_svg() {
+        if (this.lit_fsw[0] == 'S') return ssw.ttf.fsw.symbolSvg(this.lit_fsw);
+        return ssw.ttf.fsw.signSvg(this.lit_fsw);
+    }
+
+    movo_svg() {
+        if (this.mov_fsw[0] == 'S') return ssw.ttf.fsw.symbolSvg(this.mov_fsw);
+        return ssw.ttf.fsw.signSvg(this.mov_fsw);
+    }
 
     /**
      * Trovas simbolon de certa speco en signo.

@@ -6,6 +6,34 @@ function sgn_vortaro(vrt) {
 
 sgn_vrt = {
 
+  // finaĵoj, subs.
+  "-": "*",
+  "-'": "*",
+  "-o": "*",
+  "-oj": "**",
+  "-on": "$",
+  "-n": "$",
+  "-ojn": "$$",
+  // adv.
+  "-e": "#",
+  "-en": "~",
+  // adj., pron.
+  "-a": "/",
+  //"-u": "/", // ni havas iu, kiu.. aparte por ne konfuzi kun imperativo  
+  "-aj": "//",
+  "-an": "\\",
+  "-ajn": "\\\\",
+  "-is": "\\/",
+  "-as": "--",
+  "-os": "/\\",
+  "-us": "~~",
+  "-u": "=",
+  "-i": "-",
+
+  "--": "_",
+  "-o-": "+",
+  "-a-": "^",
+
  //korelativoj, Signuno.pdf, p.23
  "ĉia": "S@18/",
  "ĉial": "S@44",
