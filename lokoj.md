@@ -1,6 +1,6 @@
 ---
 layout: signuno
-title: Signuno - lokoj
+title: Manlokoj
 js:
     - signuno-0a
 css:

@@ -14,7 +14,7 @@ https://www.sutton-signwriting.io/signmaker
 
 ## Alfabeto
 
-Signuno provizas tri alfabetojn: (a) minusklan por literumado, (b) majusklan, kiu aldone al la minuskla estas uzata por sintezi vortgestojn kaj (c) manlokan, kiun oni uzas por distanca komunikado kaj por hemiaj elementoj. Plurajn signojn oni povas memori per tio, ke aŭ la mano (minuskla alfabeto) aŭ la brakoj (manloka alfabeto) imitas la formon de la latina litero.
+Signuno provizas tri alfabetojn: (a) minusklan por literumado, (b) majusklan, kiu aldone al la minuskla estas uzata por sintezi vortgestojn kaj (c) manlokan, kiun oni uzas por distanca komunikado kaj por ĥemiaj elementoj. Plurajn signojn oni povas memori per tio, ke aŭ la mano (minuskla alfabeto) aŭ la brakoj (manloka alfabeto) imitas la formon de la latina litero.
 
 <!--
 Dek literojn de la majuskla alfabeto oni uzas ankaŭ por esprimi ciferojn, sed kun turnita mano, t.e. la polmo malantaŭen.

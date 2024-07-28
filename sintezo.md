@@ -1,6 +1,6 @@
 ---
 layout: signuno
-title: Signuno - sintezo
+title: sintezo 1
 js:
     - signuno
     - sgn_vrt

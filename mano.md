@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Signuno - mano
+title: (mano)
 js-ext:
     - sign
 ---

@@ -1,6 +1,6 @@
 ---
 layout: signuno
-title: Signuno - sintezo
+title: sintezo 2
 js:
     - folio-0c
     - sgn_vrt-0a
@@ -22,24 +22,24 @@ https://www.sutton-signwriting.io/signmaker
     }
 </style>
 
-Trovu vorton en la vortaro:
+Trovu baza vortaro:
 <input id="vortaro" name="vortaro" list="sgn_vrt"/>
 <datalist id="sgn_vrt"></datalist>
 
-kaj laŭbezone aldonu finaĵon:  
+kaj aldonu finaĵon:  
 ()-as ()-is ()-os ()-i ()-u  
 ()-o ()-on ()-oj ()-ojn  
 ()-a ()-an ()-aj ()-ajn  
-()-e ()-en
+()-e ()-en ()neniu
 {: .elekto #fino}
 
 Vorto: <span id="vorto" class="akc"></span>
 
-|litero: <span id="s_litero" class="akc"></span>|manloko: <span id="s_loko" class="akc"></span>|movo: <span id="s_movo" class="akc"></span>|
-|<span id="ssw_litero"></span>|<span id="ssw_loko"></span>|<span id="ssw_movo"></span>|
+|litero: <span id="s_litero" class="akc"></span>|manloko: <span id="s_loko" class="akc"></span>|movo: <span id="s_movo" class="akc"></span>|sintezo <span id="s_signo" class="akc"></span>|
+|<span id="ssw_litero"></span>|<span id="ssw_loko"></span>|<span id="ssw_movo"></span>|<span id="ssw_signo"></span>|
 
-|sintezo <span id="s_signo" class="akc"></span>|
-|<span id="ssw_signo"></span>|
+[Aldonu]
+{: .butonoj #aldonu}
 
 |eo|sgn|
 
@@ -63,8 +63,12 @@ let gesto, fino;
 
 elekte((elekto,valoro) => {
   console.log(elekto+':'+valoro);
-  fino = valoro;
+  fino = valoro == "neniu"? "": valoro;
   sintezo();
+});
+
+butone((tasko) => {
+    console.log(tasko);
 });
 
 function sintezo() {
@@ -77,6 +81,16 @@ function sintezo() {
             if (fin) sgn += fin;
         }
         sintezo_ssw(sgn);
+    } else {
+        document.getElementById("vorto").textContent = "?"
+        malplenigu("#s_signo");
+        malplenigu("#s_loko");
+        malplenigu("#s_litero");
+        malplenigu("#s_movo");
+        malplenigu("#ssw_litero");
+        malplenigu("#ssw_loko");
+        malplenigu("#ssw_movo");
+        malplenigu("#ssw_signo");
     }
 }
 
@@ -91,10 +105,10 @@ function sintezo_ssw(sgn) {
     // prezentu la geston
     gesto.preparo();
     gesto.sintezo();
-    document.getElementById("ssw_litero").innerHTML = gesto.litero_svg();
-    document.getElementById("ssw_loko").innerHTML = gesto.loko_svg();
-    document.getElementById("ssw_movo").innerHTML = gesto.movo_svg();
-    document.getElementById("ssw_signo").innerHTML = gesto.gesto_svg();
+    document.getElementById("ssw_litero").innerHTML = gesto.litero_svg()||"";
+    document.getElementById("ssw_loko").innerHTML = gesto.loko_svg()||"";
+    document.getElementById("ssw_movo").innerHTML = gesto.movo_svg()||"";
+    document.getElementById("ssw_signo").innerHTML = gesto.gesto_svg()||"";
 }
 
 signune(()=> {

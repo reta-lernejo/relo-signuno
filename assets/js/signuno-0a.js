@@ -489,8 +489,10 @@ class Gesto {
     }
 
     movo_svg() {
-        if (this.mov_fsw[0] == 'S') return ssw.ttf.fsw.symbolSvg(this.mov_fsw);
-        return ssw.ttf.fsw.signSvg(this.mov_fsw);
+        if (this.movo && this.mov_fsw) {
+            if (this.mov_fsw[0] == 'S') return ssw.ttf.fsw.symbolSvg(this.mov_fsw);
+            return ssw.ttf.fsw.signSvg(this.mov_fsw);    
+        }
     }
 
     /**
