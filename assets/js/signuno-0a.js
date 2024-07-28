@@ -580,7 +580,7 @@ class Gesto {
 
                 // ni unue trovu la mansimbolon (S100..S204) en litero
                 // la aliaj estas supoze la fingro/manmovaj simboloj
-                const lman = this.simboloj(this.lit_ssw,0x100,0x204).next();
+                const lman = this.simboloj(this.lit_ssw,0x100,0x204).next().value; // .find()
 
                 // ni unue anstataŭigas la manon kaj korektas la pozicion
                 const d = Gesto.delto(man.symbol,lman.symbol);
