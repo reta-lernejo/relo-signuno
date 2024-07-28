@@ -13,6 +13,8 @@ https://www.sutton-signwriting.io/signmaker
 
 ## Alfabeto
 
+[]minuskla []majuskla []manloka
+
 <div id="alfabeto">
 
 |a|b|c|ĉ|d|

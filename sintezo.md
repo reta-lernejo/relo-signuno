@@ -204,7 +204,7 @@ function sintezo(formulo) {
 
         // literformulo (a..Z)
         const lf = fm[1]? Gesto.sgn_elm[fm[1]]: undefined
-        // poziciformulo (manlokoj @00..@64)
+        // poziciformulo (manlokoj @00..@63)
         const pf = fm[2]? Gesto.sgn_elm['@'+fm[2]]: undefined;
         // aldona movo/tuŝo ks
         const mf = fm[3]? Gesto.sgn_elm[fm[3]]: undefined;
