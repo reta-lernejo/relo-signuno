@@ -179,15 +179,15 @@ class Gesto {
     
         "A": "M508x514S22802494x504S17620492x486",
         "B": "M506x517S15a20494x490S22104494x483",
-        "C": "S17720",
+        "C": "S17720", "Ĉ": "S17720",
         "D": "S1e220",
         "E": "S15020",
         
         "F": "M515x513S1ef20486x498S22104487x487",
-        "G": "S1f520",
-        "H": "S19c20",
+        "G": "S1f520", "Ĝ": "S1f520",
+        "H": "S19c20", "Ĥ": "S19c20",
         "I": "S1c620",
-        "J": "S12820",
+        "J": "S12820", "Ĵ": "S12820",
         
         "K": "S16320",
         "L": "M512x513S1eb20488x494S22200489x487",
@@ -197,9 +197,9 @@ class Gesto {
         
         "P": "S1da20",
         "R": "S14420",
-        "S": "S14c20",
-        "T": "S1c520",
-        "U": "S18c20",
+        "S": "S14c20", "Ŝ": "S14c20",
+        "T": "S1c528",
+        "U": "S18c20", "Ŭ": "S18c20",
     
         "V": "M512x519S11820489x492S21900490x481",
         "Z": "M513x520S14c20489x489S22620487x480",
@@ -360,6 +360,22 @@ class Gesto {
         "y": "@01",
         "z": "@30"
     }
+
+
+    /**
+     * Redonas SVG-bildon por donita simbolo aŭ signo en formo FSW
+     * @param {*} fsw 
+     * @returns SVG-grafikon
+     */
+    static fsw2svg(fsw) {
+        if (fsw) {
+            if (fsw[0] == 'S')
+                return  ssw.ttf.fsw.symbolSvg(fsw);
+            else
+                return ssw.ttf.fsw.signSvg(fsw);
+        }
+    }
+
 
     /**
      * Redonas la diferencon inter la grandeco de du
