@@ -376,6 +376,13 @@ class Gesto {
         }
     }
 
+    /**
+     * Redonas la grandecon de simbolo kiel [larĝo,alto]
+     * @param {*} S1 
+     */
+    static simbolgrandeco(S) {
+        return ssw.ttf.fsw.symbolSize(S);
+    }
 
     /**
      * Redonas la diferencon inter la grandeco de du
@@ -514,7 +521,7 @@ class Gesto {
         location 	    S37f - S386 	U+4EFA1 -U+4F2A0
         punctuation 	S387 - S38b 	U+4F2A1 -U+4F480
     */
-    *simboloj(fsw, xde=0x15a, xal=0x15a) {
+    *simboloj(fsw, xde=0x15a, xal=0x15c) {
         for (let i=0; i<fsw.spatials.length; i++) {
             const s = fsw.spatials[i];
             const hex = parseInt(s.symbol.substring(1,4),16)
@@ -526,12 +533,47 @@ class Gesto {
     }    
 
     /**
-     * Eltrovas la poziciojn de la manoj en la loko-signo. Se mano nur rolas kiel
-     * fiksa pozicio, kaj do ne estas simbolo de sepco S15a, ĝi ne kalkuliĝas.
+     * Eltrovas la poziciojn de la mano(j) en la loko-signo. Se mano nur rolas kiel
+     * fiksa pozicio, kaj do ne estas simbolo de speco S15a..S15c, ĝi ne kalkuliĝas.
      */
     manoj() {
-        const manoj = this.simboloj(this.lok_ssw);
-        return manoj.toArray();
+        return this.simboloj(this.lok_ssw);
+    }
+
+    /**
+     * Eltrovas kie la mano(j) de la loko-signo pli-malpli montras per la pinto.
+     * Tio dependas de la pozico sed ankaŭ de formo. Se mano nur rolas kiel
+     * fiksa pozicio, kaj do ne estas simbolo de speco S15a..S15c, ĝi ne kalkuliĝas.
+     */
+    manpintoj() {
+        const manoj = this.manoj();
+        const pintoj = [];
+        for (const m of manoj) {
+            // ni bezonas la pozicion, grandecon kaj rotacion
+            // de la mano
+            const g = Gesto.simbolgrandeco(m.symbol);
+            // FARENDA: konsideru ankaŭ la grandcon
+            // de la movsimbolo, kiun ni momente ne scias
+            // eble ni donu ĝin kiel argumento?
+            const dx = .6*g[0];
+            const dy = .6*g[1];
+
+            let p = Array.from(m.coord); // centro
+            // rotacio estas kontraŭhorloĝe 0 (supre), 1,2,...7 (supre-dekstre)
+            // kaj spegule same de 8..F
+            switch (m.symbol[5]) {
+                case '0': case '8': p[1] -= dy; break;
+                case '1': case '9': p = [p[0]-dx, p[1]-dy]; break;
+                case '2': case 'a': p[0] -= dx; break;
+                case '3': case 'b': p = [p[0]-dx, p[1]+dy]; break;
+                case '4': case 'c': p[1] += dy; break;
+                case '5': case 'd': p = [p[0]+dx, p[1]+dy]; break;
+                case '6': case 'e': p[0] += dx; break;
+                case '7': case 'f': p = [p[0]+dx, p[1]-dy]; break;
+            }
+            pintoj.push(p);
+        }
+        return pintoj;
     }
 
     /**
@@ -613,13 +655,19 @@ class Gesto {
      * Aldonas movsignojn al la gesto, se movo estas kodita
      */
     movsintezo() {
-
         // se ĉestas movsigno aldonu ĝin
-        if (this.mov_ssw) {
-            this.gesto_ssw.spatials.push({
-                coord: [500,500],
-                symbol: this.mov_ssw.symbol
-            });
+        // KOREKTU: ni subpremu movsignon por aeraj lokoj 
+        // nur se temas pri tuŝsigno, sed ne por vera movo!
+        if (this.mov_ssw && !this.aera()) {
+            // ni pozicion la movsignon ĉe la manpintoj
+            const pintoj = this.manpintoj();
+
+            for (const p of pintoj) {
+                this.gesto_ssw.spatials.push({
+                    coord: p,
+                    symbol: this.mov_ssw.symbol
+                });    
+            }
         }
     }
 
