@@ -14,6 +14,8 @@ https://www.sutton-signwriting.io/signmaker
 
 ## Manlokoj
 
+Por prezentado de gestoj ni uzas la grafikan lingvon [Sutton Sign Writing](https://github.com/sutton-signwriting). Per ĝi la gestojn oni skribas ordinare el dorsa perspektivo (ŝultra strio sub la kapbsimbolo: ⍜︎), dum la mansignoj estas aŭ el dorsa aŭ el desupra perspektivo (rekoneblaj per blanka strio ĉe la fingrartiko). Por pli klare montri la pozicion de la manoj ni en pluraj manlokoj montras elsupran perspektivon (rekonebla per la ŝultra strio sub la kapsimbolo: ⦵︎)
+
 <style>
   tr:nth-child(odd) {
     background: lightskyblue;

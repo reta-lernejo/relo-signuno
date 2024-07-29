@@ -9,9 +9,16 @@ css:
     - sign
 ---
 
-<!--
+## Sintezo
 
+La gestoj de Signuno estas sintezitaj el 64 [mansignoj](abc) (2 alfabetoj de 32 literoj) ĉe 64 [manlokoj](lokoj) (pozicioj) kaj aldonaj movoj por gramatikaj indikoj.
+
+<!--
 https://www.sutton-signwriting.io/signmaker
+
+FARENDA:
+- sintezo ĉe oblikvaj manoj: kobalt, rentgen
+- metu movsignojn ĝuste ĉe la pinto de la manoj kaj ĉe tuŝsignoj anstaŭigu evtl. jaman el la pozicio
 -->
 
 <style>
