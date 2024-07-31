@@ -216,26 +216,26 @@ class Gesto {
         "$": "S21100", // frot (aŭ "S20e00" - viŝ?): -on, -n
         "$$": "S21200", // frot-frot (aŭ "S20f0" - viŝviŝ?): -ojn
     
-        "/": "S26506", // alekstera moveto: adj,pron -a, -u
-        "//": "S26606", // alekstera movo: adj,pron -aj, -uj
+        "/": ["S26506","S26512"], // alekstera moveto: adj,pron -a, -u
+        "//": ["S26606","S26612"], // alekstera movo: adj,pron -aj, -uj
     
-        "\\": "S26502", // alinterna moveto: adj,pron -an, -un
-        "\\\\": "S26602", // alinterna movo: adj,pron -ajn, -ujn
+        "\\": ["S26502","S26516"], // alinterna moveto: adj,pron -an, -un
+        "\\\\": ["S26602","S266162"], // alinterna movo: adj,pron -ajn, -ujn
     
         // verbaj formoj
-        "\\/": "S28806", // alekstera valeta movo: -is
-        "--": "S22b06", // alekstera rekta movo: -as
-        "/\\": "S2880a", // alekstera monteta movo: -os
-        "~~": "S2920a", // alekstera oscila movo: -us
-        "=": "S22f06", // dufoja alekstera rekta moveto: -u
-        "-": "S22a06", // alekstera rekta moveto: -i
+        "\\/": ["S28806","S2881e"], // alekstera valeta movo: -is
+        "--": ["S22b06","S22b12"], // alekstera rekta movo: -as
+        "/\\": ["S2880a","S28812"], // alekstera monteta movo: -os
+        "~~": ["S2920a","S29212"], // alekstera oscila movo: -us
+        "=": ["S22f06","S22f12"], // dufoja alekstera rekta moveto: -u
+        "-": ["S22a06","S22a12"], // alekstera rekta moveto: -i
     
-        "~": "S22b02", // alinterna rekta movo: -en (tien, hejmen...)
-        "#": "S2e300", // cirkla movo: -e (tie, hejme...)
+        "~": ["S22b02","S22b16"], // alinterna rekta movo: -en (tien, hejmen...)
+        "#": ["S2e300","S2e318"], // cirkla movo: -e (tie, hejme...)
     
         "_": "", // neniu aldona movo krom transiro de unu al alia gesto
-        "+": "23302", // krucmova transiro inter du gestoj
-        "^": "S23b0d", // pintmova transiro inter du gestoj
+        "+": ["23302","S2331a"], // krucmova transiro inter du gestoj
+        "^": ["S23b0d","S23b15"], // pintmova transiro inter du gestoj
     
         // 64 manlokoj, uzataj por sintezo de vort-gestoj    
         "@00": "M521x539S33b00482x483S15a10493x512",
@@ -384,6 +384,42 @@ class Gesto {
         return ssw.ttf.fsw.symbolSize(S);
     }
 
+
+    /**
+     * Testas, ĉu la simbolo havas certan simbolspecon
+       Intervaloj de simboltipoj vd. ĉap. 2.3.3 en
+       https://datatracker.ietf.org/doc/id/draft-slevinski-formal-signwriting-09.html#name-formal-signwriting-in-ascii
+
+        all symbols 	S100 - S38b 	U+40001 -U+4F480
+        writing 	    S100 - S37e 	U+40001 -U+4EFA0
+        --
+        hand 	        S100 - S204 	U+40001 -U+461E0
+        movement 	    S205 - S2f6 	U+461E1 -U+4BCA0
+        dynamic 	    S2f7 - S2fe 	U+4BCA1 -U+4BFA0
+        head 	        S2ff - S36c 	U+4BFA1 -U+4E8E0
+        hcenter 	    S2ff - S36c 	U+4BFA1 -U+4E8E0
+        vcenter 	    S2ff - S375 	U+4BFA1 -U+4EC40
+        trunk 	        S36d - S375 	U+4E8E1 -U+4EC40
+        limb 	        S376 - S37e 	U+4EC41 -U+4EFA0
+        location 	    S37f - S386 	U+4EFA1 -U+4F2A0
+        punctuation 	S387 - S38b 	U+4F2A1 -U+4F480
+    */
+    static simbol_speco(S,speco) {
+        const nro = parseInt(S.substring(1,4),16);
+        const rot = parseInt(S.substring(5,6));
+        return (
+            speco == "mano" && nro >= 0x100 && nro <= 0x204
+            || speco == "dekstra_mano" && nro >= 0x100 && nro <= 0x204 && rot < 8
+            || speco == "maldekstra_mano" && nro >= 0x100 && nro <= 0x204 && rot >= 8
+            || speco == "movo" && nro >= 0x205 && nro <= 0x2f6
+            || speco == "tuŝo" && nro >= 0x205 && nro <= 0x213
+            || speco == "sago" && nro >= 0x218 && nro <= 0x2f6 //???
+            || speco == "dinamiko" && nro >= 0x2f7 && nro <= 0x2fe
+            || speco == "kapo" && nro >= 0x2ff && nro <= 0x36c
+            // ...
+        )
+    }
+
     /**
      * Redonas la diferencon inter la grandeco de du
      * simboloj. Ni bezonas tion, por korekti disŝovojn.
@@ -460,7 +496,11 @@ class Gesto {
             }
             if (this.movo) {
                 this.mov_fsw = Gesto.sgn_elm[this.movo];
-                this.mov_ssw = this.mov_fsw[0] == 'S'? ssw.fsw.parse.symbol(this.mov_fsw) : ssw.fsw.parse.sign(this.mov_fsw);
+                if (typeof this.mov_fsw == "string") {
+                    this.mov_ssw = this.mov_fsw[0] == 'S'? ssw.fsw.parse.symbol(this.mov_fsw) : ssw.fsw.parse.sign(this.mov_fsw);    
+                } else if (this.mov_fsw instanceof Array) {
+                    this.mov_ssw = this.mov_fsw.map((f) => f[0] == 'S'? ssw.fsw.parse.symbol(f) : ssw.fsw.parse.sign(f));    
+                }
             }
         }
     }
@@ -495,6 +535,20 @@ class Gesto {
         return ssw.ttf.fsw.signSvg(this.lit_fsw);
     }
 
+    /**
+     * Redonas objekton por la movo, kiu povas esti simpla simbolstrukturo
+     * aŭ areo da ili
+     * @param {*} i 
+     */
+    movo_ssw(i=0) {
+        if (this.mov_ssw instanceof Array) {
+            if (this.mov_ssw.length>i) return this.mov_ssw[i];
+            return this.mov_ssw[0];
+        } else { // objekto
+            return this.mov_ssw;
+        }
+    }
+
     movo_svg() {
         if (this.movo && this.mov_fsw) {
             if (this.mov_fsw[0] == 'S') return ssw.ttf.fsw.symbolSvg(this.mov_fsw);
@@ -502,25 +556,12 @@ class Gesto {
         }
     }
 
+
     /**
      * Trovas simbolon de certa speco en signo.
        Intervaloj de simboltipoj vd. ĉap. 2.3.3 en
        https://datatracker.ietf.org/doc/id/draft-slevinski-formal-signwriting-09.html#name-formal-signwriting-in-ascii
-
-        all symbols 	S100 - S38b 	U+40001 -U+4F480
-        writing 	    S100 - S37e 	U+40001 -U+4EFA0
-        --
-        hand 	        S100 - S204 	U+40001 -U+461E0
-        movement 	    S205 - S2f6 	U+461E1 -U+4BCA0
-        dynamic 	    S2f7 - S2fe 	U+4BCA1 -U+4BFA0
-        head 	        S2ff - S36c 	U+4BFA1 -U+4E8E0
-        hcenter 	    S2ff - S36c 	U+4BFA1 -U+4E8E0
-        vcenter 	    S2ff - S375 	U+4BFA1 -U+4EC40
-        trunk 	        S36d - S375 	U+4E8E1 -U+4EC40
-        limb 	        S376 - S37e 	U+4EC41 -U+4EFA0
-        location 	    S37f - S386 	U+4EFA1 -U+4F2A0
-        punctuation 	S387 - S38b 	U+4F2A1 -U+4F480
-    */
+       */
     *simboloj(fsw, xde=0x15a, xal=0x15c) {
         for (let i=0; i<fsw.spatials.length; i++) {
             const s = fsw.spatials[i];
@@ -571,7 +612,7 @@ class Gesto {
                 case '6': case 'e': p[0] += dx; break;
                 case '7': case 'f': p = [p[0]+dx, p[1]-dy]; break;
             }
-            pintoj.push(p);
+            pintoj.push({mano: m, pinto: p});
         }
         return pintoj;
     }
@@ -658,16 +699,25 @@ class Gesto {
         // se ĉestas movsigno aldonu ĝin
         // KOREKTU: ni subpremu movsignon por aeraj lokoj 
         // nur se temas pri tuŝsigno, sed ne por vera movo!
-        if (this.mov_ssw && !this.aera()) {
-            // ni pozicion la movsignon ĉe la manpintoj
+        if (this.mov_ssw 
+            && !(this.aera() && "**$$".indexOf(this.movo)>-1) // tuŝsigno ne eblas en aera manloko
+            ) {
+            // ni pozicios la movsignon ĉe la manpintoj
             const pintoj = this.manpintoj();
 
-            for (const p of pintoj) {
+            //for (const p of pintoj) {
+            pintoj.forEach((p,i) => {
+                const sym = this.movo_ssw(i).symbol;
+                const pnt = p.pinto;
+                if (Gesto.simbol_speco(p.mano.symbol,"maldekstra_mano")) {
+                    // por maldekstra mano ŝovu la movsimbolon maldekstren
+                    pnt[0] -= Gesto.simbolgrandeco(sym)[0]
+                }
                 this.gesto_ssw.spatials.push({
-                    coord: p,
-                    symbol: this.mov_ssw.symbol
-                });    
-            }
+                    coord: pnt,
+                    symbol: sym
+                });                    
+            });
         }
     }
 
