@@ -244,7 +244,7 @@ class Gesto {
         "@03": "M528x537S31500483x483S15b00516x510S36d00479x526",
         
         "@04": "M521x525S31500482x483S15a00501x498S15a00487x498",
-        "@05": "M521x529S15a10494x502S33200482x483",
+        "@05": "M521x529S15a10494x502S33100482x483S20500495x495",
         "@06": "M535x530S15a10523x490S33000476x483S20500518x482",
         "@07": "M524x552S15a11501x529S20500495x519S15a19476x529S2ff00482x483",
         
@@ -736,10 +736,11 @@ class Gesto {
                 // depende de la movsigno kaj manflanko ni devas fari iujn korektojn
                 if (Gesto.simbol_speco(p.mano.symbol,"dekstra_mano")) {
                     // se la loko-signo jam enhavas tuŝsignon ni anstataŭigas ĝin
-                    if(tuŝo) {
+                    if (tuŝo && Gesto.simbol_speco(sym,"tuŝo")) {
                         pnt = tuŝo.coord;
                         this.forigu_simbolon(tuŝo.symbol);
-                    } else if (Gesto.simbol_speco(sym,"sago")) {
+                    };
+                    if (Gesto.simbol_speco(sym,"sago")) {
                         // por dekstra mano ŝovu la movsimbolon dekstren
                         // laŭ manlarĝeco
                         pnt[0] += Math.trunc(Gesto.simbolgrandeco(p.mano.symbol)[0])
