@@ -29,7 +29,7 @@ FARENDA:
     }
 </style>
 
-Trovu baza vortaro:
+Trovu en baza vortaro:
 <input id="vortaro" name="vortaro" list="sgn_vrt"/>
 <datalist id="sgn_vrt"></datalist>
 
@@ -48,7 +48,8 @@ Vorto: <span id="vorto" class="akc"></span>
 [Aldonu]
 {: .butonoj #aldonu}
 
-|eo|sgn|
+|Esperanto|Signuno|Gesto|
+{: #teksto}
 
 
 <script>
@@ -75,7 +76,14 @@ elekte((elekto,valoro) => {
 });
 
 butone((tasko) => {
-    console.log(tasko);
+    //console.log(tasko);
+    const teksto = ĝi("#teksto");
+    const tr = kreu("tr");
+    const eo = kreu("td",{},ĝi("#vorto").textContent);
+    const sgn = kreu("td",{},ĝi("#s_signo").textContent);
+    const gst = kreu("td"); gst.innerHTML = ĝi("#ssw_signo").innerHTML;
+    tr.append(eo,sgn,gst);
+    teksto.append(tr);
 });
 
 function sintezo() {

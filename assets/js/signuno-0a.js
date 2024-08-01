@@ -590,6 +590,13 @@ class Gesto {
     }    
 
     /**
+     * Forigas ĉiujn simbolojn el la gesto, kun la donita simbolkodo
+     */
+    forigu_simbolon(S) {
+        this.gesto_ssw.spatials = this.gesto_ssw.spatials.filter((sym) => sym.smybol != S)
+    }
+
+    /**
      * Eltrovas la poziciojn de la mano(j) en la loko-signo. Se mano nur rolas kiel
      * fiksa pozicio, kaj do ne estas simbolo de speco S15a..S15c, ĝi ne kalkuliĝas.
      */
@@ -720,19 +727,25 @@ class Gesto {
             ) {
             // ni pozicios la movsignon ĉe la manpintoj
             const pintoj = this.manpintoj();
+            const tuŝo = this.simboloj(this.gesto_ssw,0x205,0x213).next().value;
 
-            //for (const p of pintoj) {
             pintoj.forEach((p,i) => {
                 const sym = this.movo_ssw(i).symbol;
-                const pnt = p.pinto;
+                let pnt = p.pinto;
                 if (Gesto.simbol_speco(p.mano.symbol,"dekstra_mano")) {
-                    // por dekstra mano ŝovu la movsimbolon dekstren
-                    // laŭ manlarĝeco
-                    pnt[0] += Gesto.simbolgrandeco(p.mano.symbol)[0]
+                    // se la loko-signo jam enhavas tuŝsignon ni anstataŭigas ĝin
+                    if(tuŝo) {
+                        pnt = tuŝo.coord;
+                        this.forigu_simbolon(tuŝo.symbol);
+                    } else {
+                        // por dekstra mano ŝovu la movsimbolon dekstren
+                        // laŭ manlarĝeco
+                        pnt[0] = Math.trunc(pnt[0] + Gesto.simbolgrandeco(p.mano.symbol)[0])
+                    }
                 } else {
                     // por maldekstra mano ŝovu la movsimbolon maldekstren
                     // laŭ ties larĝeco
-                    pnt[0] -= Gesto.simbolgrandeco(sym)[0]
+                    pnt[0] = Math.trunc(pnt[0] - Gesto.simbolgrandeco(sym)[0])
                 }
                 this.gesto_ssw.spatials.push({
                     coord: pnt,
