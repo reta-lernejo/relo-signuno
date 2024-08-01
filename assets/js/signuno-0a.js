@@ -488,7 +488,7 @@ class Gesto {
                 // la sintezita gesto, ni komencas per la manloko
                 // kaj poste ŝanĝas ties mano(j) al la litersigno kaj
                 // aldonas evtl. movojn
-                this.gesto_ssw = this.lok_ssw;
+                this.gesto_ssw = structuredClone(this.lok_ssw); // profunda kopio por ne ŝanĝi .spatials de ambaŭ samtempe!
             }
             if (this.litero) {
                 this.lit_fsw = Gesto.sgn_elm[this.litero];
@@ -535,6 +535,21 @@ class Gesto {
         return ssw.ttf.fsw.signSvg(this.lit_fsw);
     }
 
+
+    /**
+     * Redonas FSW por la movo, kiu povas esti simpla simbolstrukturo
+     * aŭ areo da ili
+     * @param {*} i 
+     */
+    movo_fsw(i=0) {
+        if (this.mov_fsw instanceof Array) {
+            if (this.mov_fsw.length>i) return this.mov_fsw[i];
+            return this.mov_fsw[0];
+        } else { // objekto
+            return this.mov_fsw;
+        }
+    }
+
     /**
      * Redonas objekton por la movo, kiu povas esti simpla simbolstrukturo
      * aŭ areo da ili
@@ -547,12 +562,13 @@ class Gesto {
         } else { // objekto
             return this.mov_ssw;
         }
-    }
+    }    
 
     movo_svg() {
         if (this.movo && this.mov_fsw) {
-            if (this.mov_fsw[0] == 'S') return ssw.ttf.fsw.symbolSvg(this.mov_fsw);
-            return ssw.ttf.fsw.signSvg(this.mov_fsw);    
+            const fsw = this.movo_fsw(0)
+            if (fsw[0] == 'S') return ssw.ttf.fsw.symbolSvg(fsw);
+            return ssw.ttf.fsw.signSvg(fsw);    
         }
     }
 
@@ -709,8 +725,13 @@ class Gesto {
             pintoj.forEach((p,i) => {
                 const sym = this.movo_ssw(i).symbol;
                 const pnt = p.pinto;
-                if (Gesto.simbol_speco(p.mano.symbol,"maldekstra_mano")) {
+                if (Gesto.simbol_speco(p.mano.symbol,"dekstra_mano")) {
+                    // por dekstra mano ŝovu la movsimbolon dekstren
+                    // laŭ manlarĝeco
+                    pnt[0] += Gesto.simbolgrandeco(p.mano.symbol)[0]
+                } else {
                     // por maldekstra mano ŝovu la movsimbolon maldekstren
+                    // laŭ ties larĝeco
                     pnt[0] -= Gesto.simbolgrandeco(sym)[0]
                 }
                 this.gesto_ssw.spatials.push({

@@ -34,7 +34,7 @@ Trovu baza vortaro:
 <datalist id="sgn_vrt"></datalist>
 
 kaj aldonu finaĵon:  
-()-as ()-is ()-os ()-i ()-u  
+()-as ()-is ()-os ()-us ()-i ()-u  
 ()-o ()-on ()-oj ()-ojn  
 ()-a ()-an ()-aj ()-ajn  
 ()-e ()-en ()neniu
