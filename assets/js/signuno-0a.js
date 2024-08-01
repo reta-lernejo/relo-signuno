@@ -488,7 +488,10 @@ class Gesto {
                 // la sintezita gesto, ni komencas per la manloko
                 // kaj poste ŝanĝas ties mano(j) al la litersigno kaj
                 // aldonas evtl. movojn
-                this.gesto_ssw = structuredClone(this.lok_ssw); // profunda kopio por ne ŝanĝi .spatials de ambaŭ samtempe!
+                // -
+                // profunda kopio por ne ŝanĝi .spatials de ambaŭ samtempe!
+                this.gesto_ssw = // eble tro nova ankoraŭ: structuredClone(this.lok_ssw); 
+                    JSON.parse(JSON.stringify(this.lok_ssw));
             }
             if (this.litero) {
                 this.lit_fsw = Gesto.sgn_elm[this.litero];

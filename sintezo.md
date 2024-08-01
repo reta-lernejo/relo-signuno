@@ -11,9 +11,10 @@ css:
 
 ## Sintezo
 
-La gestoj de Signuno estas sintezitaj el 64 [mansignoj](abc) (2 alfabetoj de 32 literoj) ĉe 64 [manlokoj](lokoj) (pozicioj) kaj aldonaj tuŝoj aŭ movoj por gramatikaj indikoj. Tuŝoj ne estas montrataj por aeraj gestoj - manke de tuŝeblo.
+Bazaj vortoj estas sintezitaj el *unuopa* litersigno kun manloko kaj eventuala movo.
+Tuŝoj ne estas montrataj por aeraj gestoj - manke de tuŝeblo.
 
-La bazaj vortoj estas sintezitaj el *unuopa* litersigno kun manloko kaj eventuala movo. Tiel malsupre vi povas krei simplan frazon helpe de la baza vortaro.
+Malsupre vi povas krei simplan frazon helpe de la baza vortaro.
 
 <!--
 https://www.sutton-signwriting.io/signmaker
