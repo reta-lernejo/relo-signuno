@@ -619,8 +619,8 @@ class Gesto {
             // FARENDA: konsideru ankaŭ la grandcon
             // de la movsimbolo, kiun ni momente ne scias
             // eble ni donu ĝin kiel argumento?
-            const dx = .6*g[0];
-            const dy = .6*g[1];
+            const dx = Math.trunc(.6*g[0]);
+            const dy = Math.trunc(.6*g[1]);
 
             let p = Array.from(m.coord); // centro
             // rotacio estas kontraŭhorloĝe 0 (supre), 1,2,...7 (supre-dekstre)
@@ -732,21 +732,27 @@ class Gesto {
             pintoj.forEach((p,i) => {
                 const sym = this.movo_ssw(i).symbol;
                 let pnt = p.pinto;
+
+                // depende de la movsigno kaj manflanko ni devas fari iujn korektojn
                 if (Gesto.simbol_speco(p.mano.symbol,"dekstra_mano")) {
                     // se la loko-signo jam enhavas tuŝsignon ni anstataŭigas ĝin
                     if(tuŝo) {
                         pnt = tuŝo.coord;
                         this.forigu_simbolon(tuŝo.symbol);
-                    } else {
+                    } else if (Gesto.simbol_speco(sym,"sago")) {
                         // por dekstra mano ŝovu la movsimbolon dekstren
                         // laŭ manlarĝeco
-                        pnt[0] = Math.trunc(pnt[0] + Gesto.simbolgrandeco(p.mano.symbol)[0])
+                        pnt[0] += Math.trunc(Gesto.simbolgrandeco(p.mano.symbol)[0])
                     }
                 } else {
-                    // por maldekstra mano ŝovu la movsimbolon maldekstren
-                    // laŭ ties larĝeco
-                    pnt[0] = Math.trunc(pnt[0] - Gesto.simbolgrandeco(sym)[0])
+                    if (Gesto.simbol_speco(sym,"sago")) {
+                        // por maldekstra mano ŝovu la movsimbolon maldekstren
+                        // laŭ ties larĝeco
+                        pnt[0] -= Math.trunc(Gesto.simbolgrandeco(sym)[0])
+                    }
                 }
+
+                // aldonu la movgeston
                 this.gesto_ssw.spatials.push({
                     coord: pnt,
                     symbol: sym
