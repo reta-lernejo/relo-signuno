@@ -3,7 +3,7 @@ layout: signuno
 title: Alfabeto
 js:
     - folio-0c
-    - signuno-0a
+    - signuno-0b
 css:
     - sign
 ---
@@ -22,7 +22,11 @@ Dek literojn de la majuskla alfabeto oni uzas ankaŭ por esprimi ciferojn, sed k
 
 Kelkaj signoj povas esprimi similajn literojn: ekz-e la mansignoj por supersignaj literoj estas la samaj kiel la koncernaj majusklaj literoj - kun kaj sen supersignoj (do ĉ, C kaj Ĉ havas la saman mansignon). Simile la manloka signo por y kaj ĵ, por ŭ kaj w estas la samaj.
 
-[x]minuskla []majuskla []manloka
+Cetere oni certagrade povas esprimi kaj legi parolitajn literojn per la buŝo 
+laŭ la pozicio de lipoj kaj lango. Sed multaj literoj montras similian buŝbildon. Do tio estas nur akompana helpo
+por distingi vortojn kun samaj gestoj.
+
+[x]minuskla []majuskla []manloka []buŝa
 {: .elekto #abc}
 
 <style>
@@ -116,6 +120,10 @@ Kelkaj signoj povas esprimi similajn literojn: ekz-e la mansignoj por supersigna
                 nom += ` [${l}${mnm?" - "+mnm:""}]`;
                 const ms = Gesto.sgn_lokabc[l];
                 sgn.push(Gesto.sgn_elm[ms]);
+            }
+            if (ĝi("#abc_3").checked) {
+                const b = Gesto.sgn_buŝ[l];
+                if (b) sgn.push(b);
             }
             // se nenio estas elektita, forigu la tabelon
             if (!nom) {
