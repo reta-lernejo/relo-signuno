@@ -29,6 +29,10 @@ por distingi vortojn kun samaj gestoj.
 [x]minuskla []majuskla []manloka []buŝa
 {: .elekto #abc}
 
+Literumu: <input id="literumo" name="literumo" type="text" value="Zamenhof"/> [Ek]
+{: .butonoj #literumu}
+<span id="literum_signoj"></span>
+
 <style>
     .signoj {
         display: flex;
@@ -43,6 +47,9 @@ por distingi vortojn kun samaj gestoj.
     .signo svg {
         vertical-align: middle;
     }
+    #literum_signoj span {
+        padding: 0.2em
+    }
 </style>
 
 <div id="tbl_abc"></div>
@@ -51,6 +58,7 @@ por distingi vortojn kun samaj gestoj.
 
     signune(montru_abc);
     elekte(montru_abc);
+    butone(literumu);
 
     const literoj = "abcĉdefgĝhĥijĵklmnopqrsŝtuŭvwxyz";
 
@@ -156,6 +164,46 @@ por distingi vortojn kun samaj gestoj.
             s.innerHTML = svg;
             }
         });
+    }
+
+    function literumu() {
+        const ltr = ĝi("#literumo").value;
+        console.log("literumi: "+ltr);
+
+        let sgn = [[],[],[],[]];
+        if (ĝi("#abc_0").checked) {
+            for (l of ltr.toLowerCase()) {
+                sgn[0].push(Gesto.sgn_elm[l]);
+            }
+        };
+        if (ĝi("#abc_1").checked) {
+            for (l of ltr.toUpperCase()) {
+                sgn[1].push(Gesto.sgn_elm[l]);
+            }
+        };
+        if (ĝi("#abc_2").checked) {
+            for (l of ltr.toLowerCase()) {
+                const ms = Gesto.sgn_lokabc[l];
+                sgn[2].push(Gesto.sgn_elm[ms]);
+            }
+        };
+        if (ĝi("#abc_3").checked) {
+            for (l of ltr.toLowerCase()) {
+                const b = Gesto.sgn_buŝ[l];
+                if (b) sgn[3].push(b);
+            }
+        };
+
+        const sel = ĝi("#literum_signoj");
+        sel.textContent="";
+
+        for (_sgn of sgn) {
+            const signoj = _sgn.map((s) => kreu("span",{"data-sgn":s}));
+            const div = kreu("div");
+            div.append(...signoj);
+            div.childNodes.forEach((e) => sign_render(e));
+            sel.append(div);
+        }
     }
 
 </script>
