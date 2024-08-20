@@ -130,7 +130,7 @@ Literumu: <input id="literumo" name="literumo" type="text" value="Zamenhof"/> [E
                 sgn.push(Gesto.sgn_elm[ms]);
             }
             if (ĝi("#abc_3").checked) {
-                const b = Gesto.sgn_buŝ[l];
+                const b = SuperaGesto.sgn_buŝ[l];
                 if (b) sgn.push(b);
             }
             // se nenio estas elektita, forigu la tabelon
@@ -189,7 +189,7 @@ Literumu: <input id="literumo" name="literumo" type="text" value="Zamenhof"/> [E
         };
         if (ĝi("#abc_3").checked) {
             for (l of ltr.toLowerCase()) {
-                const b = Gesto.sgn_buŝ[l];
+                const b = SuperaGesto.sgn_buŝ[l];
                 if (b) sgn[3].push(b);
             }
         };

@@ -119,7 +119,7 @@ signune(()=>{
 
 
 /**
- * Sintezas geston kiel SuttonsSignWriting el elementoj laŭ donita Signuno-kodo
+ * Sintezas bazan geston kiel SuttonsSignWriting el elementoj laŭ donita Signuno-kodo
  * 
  * vd. 
  * - https://web.archive.org/web/20230819144154/https://signuno.webs.com/
@@ -360,54 +360,6 @@ class Gesto {
         "y": "@01",
         "z": "@30"
     }
-
-    static sgn_buŝ = {
-        "a": "S34c00",
-        "b": "S35000", // sama kiel "p"
-        "c": "S36100", // sama kiel "s", "z"
-        "ĉ": "M533x518S35d00468x483S34500497x483", // "tŝ", sama kiel ĝ = dĵ
-        "d": "S35d00", // sama kiel "t"
-        "e": "S34700",
-        "f": "S36500", // sama kiel "v"
-        "g": "S35d04", // sama kiel "k", "r"
-        "ĝ": "M533x518S35d00468x483S34500497x483", // "dĵ", sama kiel ĉ = tŝ
-        "h": "", // oni vidas nur la postan vokalon
-        "ĥ": "S35800", 
-        "i": "S34800",
-        "j": "S35700",
-        "ĵ": "S34500", // sama kiel "ŝ"
-        "k": "S35d04", // sama kiel "g", "r"
-        "l": "S35c00", // sama kiel "r"
-        "m": "S33b00",
-        "n": "S35d00",
-        "o": "S34400",
-        "p": "S35000", // sama kiel "b"
-        "r": "S35c00", // sama kiel "l" (langa ro), -- ĉe aliaj lingvoj pli similas al "g", "k"
-        "s": "S36100", // sama kiel "c", "z"
-        "ŝ": "S34500", // sama kiel "ĵ"
-        "t": "S35d00", // sama kiel "d"
-        "u": "S34600", // sama kiel "y"
-        "ŭ": "S34600", // sama kiel "u", "y"
-        "v": "S36500", // sama kiel "f", "w"
-        "w": "S36500",
-        "x": "M532x518S35d04468x483S36100496x483", // "ks"
-        "y": "S34600", // sama kiel "u"
-        "z": "S36100", // sama kiel "c", "s"
-    }
-
-    // lipmovoj, vd. Signuno 2016, p. 5, 25
-    /*
-    static sgn_lip = {
-        p=p/b/m 
-        f=f/v 
-        t=t/d 
-        q=kv [kiel kŭ]
-        i=i 
-        e=e/ej/eŭ 
-        a=a/aj 
-        o=o/oj/aŭ 
-        u=u/uj
-    }*/
 
 
     /**
@@ -821,4 +773,163 @@ class Gesto {
         this.movsintezo()
     }
 
+}
+
+// vd. Signuno.pdf (2016), paĝo 5
+class SuperaGesto { 
+    static re_sgn = /^([a-zA-Z]+)@63[:!]([a-z]*)([*\\/\$~+-=#_^]{0,2})$/;
+
+
+    // reduktitaj lipmovoj, vd. Signuno 2016, p. 5, 25
+    static sgn_lip = {
+        "a": "S34c00", // a/aj 
+        "b": "S33b00", // p/b/m 
+        "d": "S35d00", //t/d 
+        "e": "S34700", // e/ej/eŭ 
+        "f": "S36500", // f/v 
+        "i": "S34800", 
+        "m": "S33b00", // p/b/m 
+        "o": "S34400", // o/oj/aŭ 
+        "p": "S33b00", // p/b/m 
+        "q": "M532x518S35d04468x483S36500496x483", // kv [kiel kŭ]
+        "t": "S35d00", //t/d 
+        "u": "S34600", //u/uj
+        "v": "S36500" // f/v 
+    }
+
+    // pli ampleksaj buŝbildoj laŭ eblecoj de SuttonSignWriting
+    static sgn_buŝ = {
+        "a": "S34c00",
+        "b": "S35000", // sama kiel "p"
+        "c": "S36100", // sama kiel "s", "z"
+        "ĉ": "M533x518S35d00468x483S34500497x483", // "tŝ", sama kiel ĝ = dĵ
+        "d": "S35d00", // sama kiel "t"
+        "e": "S34700",
+        "f": "S36500", // sama kiel "v"
+        "g": "S35d04", // sama kiel "k", "r"
+        "ĝ": "M533x518S35d00468x483S34500497x483", // "dĵ", sama kiel ĉ = tŝ
+        "h": "", // oni vidas nur la postan vokalon
+        "ĥ": "S35800", 
+        "i": "S34800",
+        "j": "S35700",
+        "ĵ": "S34500", // sama kiel "ŝ"
+        "k": "S35d04", // sama kiel "g", "r"
+        "l": "S35c00", // sama kiel "r"
+        "m": "S33b00",
+        "n": "S35d00",
+        "o": "S34400",
+        "p": "S35000", // sama kiel "b"
+        "r": "S35c00", // sama kiel "l" (langa ro), -- ĉe aliaj lingvoj pli similas al "g", "k"
+        "s": "S36100", // sama kiel "c", "z"
+        "ŝ": "S34500", // sama kiel "ĵ"
+        "t": "S35d00", // sama kiel "d"
+        "u": "S34600", // sama kiel "y"
+        "ŭ": "S34600", // sama kiel "u", "y"
+        "v": "S36500", // sama kiel "f", "w"
+        "w": "S36500",
+        "x": "M532x518S35d04468x483S36100496x483", // "ks"
+        "y": "S34600", // sama kiel "u"
+        "z": "S36100", // sama kiel "c", "s"
+    }
+
+
+
+    /**
+     * Kreas novan superan geston el Signuno-kodo
+     * @param {string} kodo la signuno-kodo de la gesto, ekz. "esT@63:epeat" (esperant)
+     * @param {string} vorto la vorto, se ni volas montri pli detalajn buŝbildojn ol indikita en la kodo ekz. "esperanto"
+     */
+    constructor(kodo, vorto) {
+        this.kodo = kodo;
+        this.vorto = vorto;
+
+        const fm = SuperaGesto.re_sgn.exec(kodo);
+        if (fm) {
+            this.manoj = fm[1];
+            this.lipoj = fm[2];
+        }
+    }
+
+    /**
+     * Kreas la buŝbildon aŭ signune, t.e. kun tre reduktita lipalfabeto
+     * aŭ pli amplekse laŭ la eblecoj de SuttonSignWriting (ekz. montrante aldone m, l/r k.a.)
+     */
+    buŝbildoj(signune = true) {
+        let labc = SuperaGesto.sgn_lip;
+        let lipoj = this.lipoj;
+        const sgn = signune || ! this.vorto;
+        if (!sgn) {
+            labc = SuperaGesto.sgn_buŝ;
+            lipoj = this.vorto;
+        };
+
+        const dist = 30; // distanco inter unuopaj bildoj
+        const y = 480;
+        let x = 500 - lipoj.length * dist;
+        let FSW = "M500x500";
+        
+        for (const l of lipoj) {
+            const lf = labc[l];
+            if (lf) {
+                if (lf[0] == 'S') {
+                    FSW += `${lf}${x}x${y}`;
+                    x += dist;
+                } else if (lf[0] == 'M') {
+                    let si = lf[8];
+                    while (si < lf.length) {
+                        const sym = lf.substring(si,si+5);
+                        FSW += `${sym}${x}x${y}`;
+                        x += dist;
+                        si += 12
+                    }
+                }
+            }
+        }
+        return FSW;
+    }
+
+    mansignoj() {
+        const msj = this.manoj;
+
+        const dist = 30; // distanco inter unuopaj signoj
+        const y = 510;
+        let x = 500 - msj.length * dist;
+        let FSW = "M500x500";
+        
+        for (const l of msj) {
+            const s = Gesto.sgn_elm[l];
+            if (s) {
+                if (s[0] == 'S') {
+                    FSW += `${s}${x}x${y}`;
+                    x += dist;
+                } else if (lf[0] == 'M') {
+                    let si = lf[8];
+                    while (si < lf.length) {
+                        const sym = lf.substring(si,si+5);
+                        FSW += `${sym}${x}x${y}`;
+                        x += dist;
+                        si += 12
+                    }
+                }
+            }
+        }
+        return FSW;
+    }
+
+    /**
+     * Redonas la geston kiel FSW (Askio)
+     */
+    gesto_fsw() {
+        const fsw = this.buŝbildoj()+this.mansignoj().substring(8);
+        return ssw.ttf.fsw.signNormalize(fsw);
+    }
+
+
+    /**
+     * Redonas la geston kiel SVG (vektorgrafiko kun TTF-tiparo)
+     */
+    gesto_svg() {
+        return ssw.ttf.fsw.signSvg(this.gesto_fsw());
+    }
+   
 }
