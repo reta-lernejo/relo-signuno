@@ -4,7 +4,7 @@ title: Sintezo
 js:
     - folio-0c
     - sgn_vrt-0a
-    - signuno-0a
+    - signuno-0b
 css:
     - sign
 ---
@@ -59,7 +59,7 @@ Vorto: <span id="vorto" class="akc"></span>
 
 function vortaro() {
     const sv = document.getElementById("sgn_vrt");
-    for (const v in sgn_vrt) {
+    for (const v of Object.keys(sgn_vrt).sort()) {
         const o = document.createElement("option");
         o.textContent = v;
         sv.append(o)

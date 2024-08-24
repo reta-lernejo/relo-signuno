@@ -51,7 +51,7 @@ Vorto: <span id="vorto" class="akc"></span><span id="s_signo" class="akc"></span
 
 function vortaro() {
     const sv = document.getElementById("sgn_vrt");
-    for (const v in sgn_vrt_super) {
+    for (const v of Object.keys(sgn_vrt_super).sort()) {
         const o = document.createElement("option");
         o.textContent = v;
         sv.append(o)
