@@ -2,7 +2,7 @@
 layout: signuno
 title: Manlokoj
 js:
-    - signuno-0a
+    - signuno-0b
 css:
     - sign
 ---
