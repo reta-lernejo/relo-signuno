@@ -69,6 +69,10 @@ function vortaro() {
 vortaro();
 
 kiam("change","#vortaro",sintezo);
+kiam("click","#ssw_signo",() => {
+    const trd = revo_trd();
+    ĝi("#ssw_signo").append(trd)
+});
 
 let gesto, fino;
 
@@ -127,6 +131,12 @@ function sintezo_ssw(sgn) {
     document.getElementById("ssw_loko").innerHTML = gesto.loko_svg()||"";
     document.getElementById("ssw_movo").innerHTML = gesto.movo_svg()||"";
     document.getElementById("ssw_signo").innerHTML = gesto.gesto_svg()||"";
+}
+
+function revo_trd() {
+    const sgn = ĝi("#s_signo").textContent;
+    const fsw = ĝi("#ssw_signo").querySelector("svg>text").textContent;
+    return `<trd lng="sgn" kod="${fsw}">${sgn}</trd>`;
 }
 
 signune(()=> {
