@@ -69,7 +69,7 @@ function vortaro() {
 vortaro();
 
 kiam("change","#vortaro",sintezo);
-kiam("click","#ssw_signo",() => {
+kiam("dblclick","#ssw_signo",() => {
     const trd = revo_trd();
     ĝi("#ssw_signo").append(trd)
 });
