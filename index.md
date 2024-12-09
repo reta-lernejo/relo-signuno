@@ -7,7 +7,7 @@ css:
     - sign
 ---
 
-La gestoj de Signuno estas [sintezitaj](sintezo) el 64 [mansignoj](abc) (2 alfabetoj de 32 literoj) ĉe 64 [manlokoj](lokoj) (pozicioj) kaj aldonaj tuŝoj aŭ movoj por gramatikaj indikoj. 
+La gestoj de Signuno estas [sintezitaj](sintezo) el 64 [mansignoj](l_abc) (2 alfabetoj de 32 literoj) ĉe 64 [manlokoj](lokoj) (pozicioj) kaj aldonaj tuŝoj aŭ movoj por gramatikaj indikoj. 
 
 
 <!--

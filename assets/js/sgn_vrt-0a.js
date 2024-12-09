@@ -1549,7 +1549,7 @@ sgn_vrt = {
  "verb": "v@23",
 
  "admir": "a@24",
- "al": "p@24",
+ //"al": "p@24", // tio ĉi estas "alo", kp al l@10
  "alt": "b@24",
  "analiz": "V@24",
  "atent": "t@24",
