@@ -11,7 +11,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Reta Lernejo - Signuno
+title: Signuno
 #email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
   Materialoj por lernado pri la gestolingvo Signuno
@@ -37,6 +37,8 @@ kramdown:
 
 collections:
   iloj:
+    output: true
+  kov:
     output: true
 
 # Exclude from processing.
